@@ -5,10 +5,10 @@
 
 <div align="center">
 
-![discord badge](https://img.shields.io/badge/Discord-Join%20the%20discord-blue?style=for-the-badge&link=https://discord.gg/Dsue9NYRZs)
+![discord badge](https://img.shields.io/badge/Join%20the-Discord-blue?style=for-the-badge&link=https://discord.gg/Dsue9NYRZs)
 ![uses badges](https://img.shields.io/badge/Uses-Badges-yellow?style=for-the-badge)
 ![works probably](https://img.shields.io/badge/Works-Probably-green?style=for-the-badge)
-![works probably](https://img.shields.io/badge/Made%20With-TYPESCRIPT-orange?style=for-the-badge)
+![made with typescript](https://img.shields.io/badge/Made%20With-Typescript-orange?style=for-the-badge)
 
  </div>
 
