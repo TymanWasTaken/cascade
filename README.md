@@ -4,10 +4,9 @@
 <div align="center">
 
 ![discord badge](https://img.shields.io/badge/Discord-Join%20the%20discord-blue?style=for-the-badge&link=https://discord.gg/Dsue9NYRZs)
-![uses-badges](https://forthebadge.com/images/badges/uses-badges.svg)
-[![forthebadge](https://forthebadge.com/images/badges/0-percent-optimized.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
+![uses badges](https://img.shields.io/badge/Uses-Badges-yellow?style=for-the-badge)
+![works probably](https://img.shields.io/badge/Works-Probably-green?style=for-the-badge)
+![works probably](https://img.shields.io/badge/Made%20With-TYPESCRIPT-orange?style=for-the-badge)
 
  </div>
 
