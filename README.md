@@ -1,9 +1,13 @@
 <h1 align = "center"><img src="">imagie goes here once we get a better logo</h1>
-<h1 align="center">Cascade: Library for Discordeno</h1>
+<h1 align="center">Cascade: Library for DiscordDeno</h1>
 
 <div align="center">
 
- ![discord badge](https://img.shields.io/badge/Discord-Join%20the%20discord-blue?style=for-the-badge&link=https://discord.gg/Dsue9NYRZs)
+![discord badge](https://img.shields.io/badge/Discord-Join%20the%20discord-blue?style=for-the-badge&link=https://discord.gg/Dsue9NYRZs)
+![uses-badges](https://forthebadge.com/images/badges/uses-badges.svg)
+[![forthebadge](https://forthebadge.com/images/badges/0-percent-optimized.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-typescript.svg)](https://forthebadge.com)
 
  </div>
 
