@@ -1,5 +1,5 @@
 <h1 align = "center"><img src="">imagie goes here once we get a better logo</h1>
-<h1 align="center">Cascade: Library for DiscordDeno</h1>
+<h1 align="center">Cascade: Library for Discordeno</h1>
 
 <div align="center">
 
