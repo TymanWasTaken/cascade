@@ -1,5 +1,7 @@
-<h1 align = "center"><img src="https://cdn.discordapp.com/attachments/807406629070700584/807601297590059038/imageedit_1_3499097741.png"></h1>
-<h1 align="center">Cascade: Library for Discordeno</h1>
+<h1 align = "center">
+    <img src="https://cdn.discordapp.com/attachments/807406629070700584/807601297590059038/imageedit_1_3499097741.png">
+    Cascade: Library for Discordeno
+</h1>
 
 <div align="center">
 
