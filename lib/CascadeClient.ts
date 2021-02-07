@@ -192,6 +192,33 @@ export class CascadeClient {
                 roleUpdate(...args: any[]) {
                     thisClient.listenerHandler.onEvent("client", "roleUpdate", args)
                 },
+                roleGained(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "roleGained", args)
+                },
+                roleLost(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "roleLost", args)
+                },
+                shardReady(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "shardReady", args)
+                },
+                typingStart(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "typingStart", args)
+                },
+                voiceChannelJoin(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "voiceChannelJoin", args)
+                },
+                voiceChannelLeave(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "voiceChannelLeave", args)
+                },
+                voiceChannelSwitch(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "voiceChannelSwitch", args)
+                },
+                voiceStateUpdate(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "voiceStateUpdate", args)
+                },
+                webhooksUpdate(...args: any[]) {
+                    thisClient.listenerHandler.onEvent("client", "webhooksUpdate", args)
+                }
             }
         });
     }
