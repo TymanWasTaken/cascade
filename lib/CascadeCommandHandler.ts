@@ -110,11 +110,11 @@ export class CascadeCommandHandler extends EventEmitter {
     /**
      * The list of types arguments can be parsed to
      */
-    public static types: Record<string, (text: string, message: CascadeMessage) => Promise<any | null>> = {
-        'string': async (text) => {
+    public static types: Record<string, (text: string, message: CascadeMessage) => Promise<unknown | null> | (unknown | null)> = {
+        'string': (text) => {
             return text
         },
-        'number': async (text) => {
+        'number': (text) => {
             const num = Number(text)
             return isNaN(num) ? null : num
         },
@@ -131,7 +131,7 @@ export class CascadeCommandHandler extends EventEmitter {
             }
             return null
         },
-        'channel': async (text, message) => {
+        'channel': (text, message) => {
             if (!message.guild) return null
             const mentionMatch = text.match(channelMentionReg)
             if (mentionMatch) {
@@ -146,7 +146,7 @@ export class CascadeCommandHandler extends EventEmitter {
             const channel = message.guild.channels.find((v) => v.name == text)
             return channel ? channel : null
         },
-        'snowflake': async (text) => {
+        'snowflake': (text) => {
             return text.match(snowflakeReg) ? text : null
         }
     }
