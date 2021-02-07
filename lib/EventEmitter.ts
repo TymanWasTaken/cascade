@@ -9,7 +9,7 @@ type EventHandler = (...args: any[]) => void
  * A very small port of nodejs's EventEmitters
  */
 export class EventEmitter {
-    /** 
+    /**
      * The event listeners which are registered and run on event
     */
     private registeredEvents: Collection<string, EventHandler> = new Collection()

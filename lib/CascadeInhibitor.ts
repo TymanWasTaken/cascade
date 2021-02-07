@@ -6,7 +6,7 @@ import { CascadeMessage } from './CascadeMessage.ts'
  */
 export interface CascadeInhibitorOptions {
     /**
-     * The reason to emit when emitting commandHandler#blocked 
+     * The reason to emit when emitting commandHandler#blocked
      */
     reason: string
 }
