@@ -14,41 +14,103 @@ function escapeRegExp(string: string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
+/**
+ * Options for the command handler
+ */
 export interface CascadeCommandHandlerOptions {
+    /**
+     * The directory to look for commands in
+     */
     commandDir: string,
+    /**
+     * The prefix to use for messages (can be string, array of strings, or a function returning a string or array of strings)
+     */
     prefix: prefixType
 }
 
+/**
+ * A helper interface for the arguments passed to commands
+ */
 export interface CascadeCommandArgs {
     [argument: string]: any
 }
 
+/**
+ * An interface to store raw parsed message data
+ */
 export interface CascadeCommandParse {
+    /**
+     * The prefix used for this message
+     */
     prefix: string,
+    /**
+     * Everything after the prefix and command
+     */
     content: string,
+    /**
+     * The command used
+     */
     command: CascadeCommand,
+    /**
+     * The alias used for the command
+     */
     alias: string,
+    /**
+     * Everything after the prefix
+     */
     afterPrefix: string,
+    /**
+     * The raw yargs parse of the message
+     */
     args: Arguments
 }
 
+/**
+ * The handler used to handle commands/command parsing
+ */
 export class CascadeCommandHandler {
+    /**
+     * The options for this handler
+     */
     public options: CascadeCommandHandlerOptions
+    /**
+     * The commands stored for this bot
+     */
     public commands: Collection<string, CascadeCommand>
+    /**
+     * The client for this handler
+     */
     public client: CascadeClient | null
+    /**
+     * Creates the handler
+     * @param options The options for this handler
+     */
     constructor(options: CascadeCommandHandlerOptions) {
         this.options = options
         this.commands = new Collection()
         this.client = null
     }
+    /**
+     * Removes removeText if exists from the left side of the text
+     * @param text The text to strip from
+     * @param removeText The text to strip
+     */
     private lstrip(text: string, removeText: string) {
         const reg = new RegExp(`^${escapeRegExp(removeText)}`)
         return text.replace(reg, '')
     }
+    /**
+     * Removes removeText if exists from the left side of the text
+     * @param text The text to strip from
+     * @param removeText The text to strip
+     */
     private rstrip(text: string, removeText: string) {
         const reg = new RegExp(`${escapeRegExp(removeText)}$`)
         return text.replace(reg, '')
     }
+    /**
+     * Initializes the commands in this handler
+     */
     public async init() {
         this.commands = new Collection<string, CascadeCommand>()
         for await (const commandFile of walk(this.options.commandDir)) {
@@ -59,6 +121,10 @@ export class CascadeCommandHandler {
             this.commands.set(command.options.name, command)
         }
     }
+    /**
+     * Parses command data from a message
+     * @param message Message to parse from
+     */
     public parseCommand(message: Message): CascadeCommandParse | null {
         let prefixes: prefixType
         if (typeof this.options.prefix == "function") {
@@ -103,17 +169,25 @@ export class CascadeCommandHandler {
         }
         return null
     }
+    /**
+     * Handles a message with this handler
+     * @param message The message to handle
+     */
     public async onMessage(message: CascadeMessage) {
         const parse = this.parseCommand(message)
         
         if (parse != null) {
             if (parse.command.options.ownerOnly && !this.isOwner(message.author.id)) {
-                await message.send("You are not an owner!")
+                return await message.send("You are not an owner!")
             }
             message.parse = parse
             parse.command.exec(message)
         }
     }
+    /**
+     * Checks if a user is an owner
+     * @param id The id of the user
+     */
     public isOwner(id: string) {
         if (!this.client) return false
         if (typeof this.client.owners == 'string') return this.client.owners == id

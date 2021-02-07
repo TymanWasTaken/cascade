@@ -4,13 +4,35 @@ import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
 import { CascadeLogHandler } from "./CascadeLogHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
 
+/**
+ * The main starting point for bots, the client.
+ */
 export class CascadeClient {
+    /**
+     * The token of the bot
+     */
     public token: string
+    /**
+     * The intents used for this bot
+     */
     public intents: any
+    /**
+     * The command handler used for this bot
+     */
     public commandHandler: CascadeCommandHandler
+    /**
+     * The log handlher used for this bot
+     */
     public logHandler: CascadeLogHandler
+    /**
+     * The owners of this bot
+     */
     public owners: string | string[]
 
+    /**
+     * Creats the client
+     * @param options The options to use for this bot
+     */
     public constructor(options: CascadeClientOptions) {
         this.token = options.token
         this.intents = options.intents || []
@@ -24,6 +46,9 @@ export class CascadeClient {
         this.owners = options.owners
     }
 
+    /**
+     * Logs into discord with this client
+     */
     public login() {
         const thisClient = this
         startBot({

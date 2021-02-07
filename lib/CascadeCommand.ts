@@ -1,15 +1,41 @@
-import parser from "https://deno.land/x/yargs_parser/deno.ts";
-import {Message} from "https://deno.land/x/discordeno@10.2.0/mod.ts"
+import {CascadeMessage} from "./CascadeMessage.ts";
 
+/**
+ * The options for a cascade command
+ */
 export interface CascadeCommandOptions {
+    /**
+     * The name of this command
+     */
     name: string,
+    /**
+     * The aliases of this command (make sure the first value is the main alias to call this command)
+     */
     aliases: string[],
+    /**
+     * If the bot should type as the command is running
+     * @default false
+     */
     typing?: boolean,
+    /**
+     * If the command should only run for owners of the bot
+     * @default false
+     */
     ownerOnly?: boolean
 }
 
+/**
+ * A command for the bot to use
+ */
 export class CascadeCommand {
+    /**
+     * The options for this command
+     */
     public options: CascadeCommandOptions
+    /**
+     * Creates the command
+     * @param options The options to use for this command
+     */
     public constructor(options?: CascadeCommandOptions) {
         if (options) {
             this.options = options
@@ -18,7 +44,11 @@ export class CascadeCommand {
         }
     }
 
-    public async exec(message: Message): Promise<any> {
+    /**
+     * Ran on command sent by user
+     * @param message The message sent
+     */
+    public async exec(message: CascadeMessage): Promise<any> {
         // pass
     }
 }
