@@ -78,10 +78,11 @@ export class CascadeListenerHandler {
      * @param event The event emitted
      * @param params The parameters for this event
      */
-    public async onEvent(emitter: string, event: string, params: any[]) {
+    public async onEvent(emitter: string, event: string, params?: any[]) {
         const handler = this.listeners.get(`${emitter}-${event}`)
         if (handler) {
-            handler.exec(...params)
+            if (params) handler.exec(...params)
+            else handler.exec()
         }
     }
 }
