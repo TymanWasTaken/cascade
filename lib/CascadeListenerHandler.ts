@@ -26,7 +26,7 @@ export interface CascadeListenerHandlerOptions {
 /**
  * The handler used to handle listeners/events
  */
-export class CascadeListenerHandler {
+export class CascadeListenerHandler extends EventEmitter {
     /**
      * The options for this handler
      */
@@ -44,6 +44,7 @@ export class CascadeListenerHandler {
      * @param options The options for this handler
      */
     constructor(options: CascadeListenerHandlerOptions) {
+        super()
         this.options = options
         this.listeners = new Collection()
         this.client = null
@@ -65,6 +66,7 @@ export class CascadeListenerHandler {
             })
             this.listeners.set(`${listener.options.emitter}-${listener.options.event}`, listener)
         }
+        this.emit("loaded")
     }
 
     public async setEmitters(emitters: Record<string, EventEmitter>) {
