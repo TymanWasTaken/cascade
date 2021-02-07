@@ -36,7 +36,7 @@ export interface CascadeCommandHandlerOptions {
 }
 
 export interface CascadeCommandArguments {
-    [index: number]: { 
+    [index: number]: {
         id: string,
         type: string,
         match?: 'content'
@@ -244,22 +244,22 @@ export class CascadeCommandHandler extends EventEmitter {
     public async parseArguments(message: CascadeMessage): Promise<CascadeCommandArgParse> {
         const parsedArgs: Record<string, unknown> = {}
         const parse = message.parse as CascadeCommandParse
-        const normal: { 
+        const normal: {
             id: string,
             type: string,
             match?: 'content'
         }[] = [];
-        const flags: { 
+        const flags: {
             id: string,
             type: string,
             match?: 'content'
         }[] = [];
-        const content: { 
+        const content: {
             id: string,
             type: string,
             match?: 'content'
         }[] = [];
-        ((parse.command.options.args) as { 
+        ((parse.command.options.args) as {
             id: string,
             type: string,
             match?: 'content'
