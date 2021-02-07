@@ -13,7 +13,7 @@
 
  </div>
 
-The cascade project is a library for the [discord-deno](https://github.com/discordeno/discordeno) that allows dynamic and easy command handling with many features, such as easily creatable bots that allow lots of customization
+The cascade project is a library for the [discordeno](https://github.com/discordeno/discordeno) library that allows dynamic and easy command handling with many features, such as easily creatable bots that allow lots of customization
 
 **Website**: soon™
 
@@ -24,6 +24,7 @@ The cascade project is a library for the [discord-deno](https://github.com/disco
 <h3>Prerequisites</h3>
 
 - <a href="https://deno.land/">Deno</a>
+- <a href="https://discord.com/developers/applications">An application with a bot user</a>
 
 <h2 align="center">Contributing</h2>
 
