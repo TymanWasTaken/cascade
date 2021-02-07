@@ -1,4 +1,5 @@
 import {startBot} from "https://deno.land/x/discordeno@10.2.0/mod.ts";
+import {Intents} from "https://deno.land/x/discordeno@10.2.0/mod.ts"
 import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
 import { CascadeLogHandler } from "./CascadeLogHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
@@ -14,7 +15,7 @@ export interface CascadeClientOptions {
     /**
      * The intents to use for the bot
      */
-    intents?: any,
+    intents?: (Intents | keyof typeof Intents)[],
     /**
      * The command handler to use
      */
@@ -36,7 +37,7 @@ export class CascadeClient {
     /**
      * The intents used for this bot
      */
-    public intents: any
+    public intents: (Intents | keyof typeof Intents)[]
     /**
      * The command handler used for this bot
      */
