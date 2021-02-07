@@ -1,5 +1,6 @@
 <h1 align = "center">
     <img src="https://cdn.discordapp.com/attachments/807406629070700584/807601297590059038/imageedit_1_3499097741.png">
+    <br>
     Cascade: Library for Discordeno
 </h1>
 
