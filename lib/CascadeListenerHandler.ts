@@ -1,11 +1,12 @@
-import { Message } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
-import { join } from "https://deno.land/std@0.86.0/path/mod.ts";
-import { walk } from "https://deno.land/std@0.86.0/fs/mod.ts";
+import { extname, join } from "https://deno.land/std@0.86.0/path/mod.ts";
 import { Collection } from './Collection.ts'
 import { CascadeListener } from './CascadeListener.ts'
 import { CascadeClient } from "./CascadeClient.ts";
 import { EventEmitter } from "./EventEmitter.ts";
 import { convertMessage } from "./CascadeMessage.ts";
+import { recursiveReaddir } from "https://deno.land/x/recursive_readdir@v2.0.0/mod.ts";
+import { resolve } from "https://deno.land/std@0.86.0/path/win32.ts";
+import { TermColors } from "./CascadeLogHandler.ts";
 
 /**
  * Options for the listener handler
@@ -54,16 +55,21 @@ export class CascadeListenerHandler extends EventEmitter {
         this.listeners.clear()
         if (!this.options.emitters) return
         this.listeners = new Collection<string, CascadeListener>()
-        for await (const listenerFile of walk(this.options.listenerDir)) {
-            if (!listenerFile.isFile) continue;
-            const cmdPath = join(this.options.listenerDir, listenerFile.name)
-            const listener: CascadeListener = new (await import("file://" + cmdPath)).default()
+        console.log("[Cascade] Loading listener files")
+        const files = (await recursiveReaddir(this.options.listenerDir)).map(f => join('.', f)).filter(
+            (file: string) => [".js", ".ts"].includes(extname(file))
+        )
+        console.log("[Cascade] Loaded listener files")
+        for await (const listenerFile of files) {
+            const listenerPath = resolve(listenerFile)
+            const listener: CascadeListener = new (await import("file://" + listenerPath)).default()
             if (!this.options.emitters[listener.options.emitter]) throw new Error(`${listener.options.emitter} was not a set emitter!`)
             this.options.emitters[listener.options.emitter].on(listener.options.event, (...args: any[]) => {
                 this.onEvent(listener.options.emitter, listener.options.event, args)
             })
             this.listeners.set(`${listener.options.emitter}-${listener.options.event}`, listener)
         }
+        console.log("[Cascade] Loaded listeners")
         this.emit("loaded")
     }
 

@@ -1,4 +1,4 @@
-import { Application, botID, Channel, getUser, startBot, UserPayload } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
+import { botID, getUser, startBot } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
 import { Intents } from "https://deno.land/x/discordeno@10.2.0/mod.ts"
 import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
 import { CascadeInhibitorHandler } from "./CascadeInhibitorHandler.ts";
@@ -7,6 +7,7 @@ import { CascadeLogHandler } from "./CascadeLogHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
 import { EventEmitter } from "./EventEmitter.ts";
 import { IntentUtil } from "./IntentUtil.ts";
+import { TermColors } from "./CascadeLogHandler.ts";
 
 /**
  * The options for this bot
@@ -35,7 +36,11 @@ export interface CascadeClientOptions {
     /**
      * The owner(s) of this bot
      */
-    owners: string | string[]
+    owners: string | string[],
+    /**
+     * Whether or not to verbosely log
+     */
+    verbose?: boolean
 }
 
 /**
@@ -71,6 +76,10 @@ export class CascadeClient extends EventEmitter {
      */
     public owners: string | string[]
     /**
+     * Whether or not to verbosely log
+     */
+    public verbose: boolean
+    /**
      * If this client is ready or not
      */
     public ready: boolean = false
@@ -83,6 +92,7 @@ export class CascadeClient extends EventEmitter {
         super()
         this.token = options.token
         this.intents = options.intents || IntentUtil.DEFAULT
+        this.verbose = options.verbose || false
         options.commandHandler.init()
         options.listenerHandler.init()
         options.inhibitorHandler.init()
@@ -92,7 +102,7 @@ export class CascadeClient extends EventEmitter {
         this.commandHandler.client = this
         this.listenerHandler.client = this
         this.inhibitorHandler.client = this
-        this.logHandler = new CascadeLogHandler({
+        this.logHandler = new CascadeLogHandler(this, {
             time: true,
             colors: true
         })
@@ -108,6 +118,7 @@ export class CascadeClient extends EventEmitter {
      */
     public async login() {
         const thisClient = this
+        console.log("[Cascade] Logging in")
         startBot({
             token: this.token,
             intents: this.intents,
@@ -194,6 +205,7 @@ export class CascadeClient extends EventEmitter {
                 ready(...args: any[]) {
                     thisClient.emit("ready", args)
                     thisClient.ready = true
+                    thisClient.logHandler.verbose("[Cascade] Bot ready")
                 },
                 reactionAdd(...args: any[]) {
                     thisClient.emit("reactionAdd", args)
@@ -245,5 +257,6 @@ export class CascadeClient extends EventEmitter {
                 }
             }
         });
+        console.log("[Cascade] Logged in")
     }
 }

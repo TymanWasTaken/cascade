@@ -1,13 +1,14 @@
-import { join, parse } from "https://deno.land/std@0.86.0/path/mod.ts";
-import { walk } from "https://deno.land/std@0.86.0/fs/mod.ts";
+import { join, extname } from "https://deno.land/std@0.86.0/path/mod.ts";
 import parser from "https://deno.land/x/yargs_parser/deno.ts";
-
-import {Collection, getChannel, getUser, Message} from 'https://deno.land/x/discordeno@10.2.0/mod.ts'
+import { recursiveReaddir } from "https://deno.land/x/recursive_readdir/mod.ts";
+import {Collection, getUser, Message} from 'https://deno.land/x/discordeno@10.2.0/mod.ts'
 import {CascadeCommand} from './CascadeCommand.ts'
 import { Arguments } from "https://deno.land/x/yargs_parser@v20.2.4-deno/build/lib/yargs-parser-types.d.ts";
 import { CascadeClient } from "./CascadeClient.ts";
 import { CascadeMessage, convertMessage } from "./CascadeMessage.ts";
 import { EventEmitter } from "./EventEmitter.ts";
+import { resolve } from "https://deno.land/std@0.86.0/path/win32.ts";
+import { TermColors } from "./CascadeLogHandler.ts";
 
 type prefixType = ((message: Message) => string | string[]) | string | string[]
 
@@ -171,26 +172,22 @@ export class CascadeCommandHandler extends EventEmitter {
         return text.replace(reg, '')
     }
     /**
-     * Removes removeText if exists from the left side of the text
-     * @param text The text to strip from
-     * @param removeText The text to strip
-     */
-    private rstrip(text: string, removeText: string) {
-        const reg = new RegExp(`${escapeRegExp(removeText)}$`)
-        return text.replace(reg, '')
-    }
-    /**
      * Initializes the commands in this handler
      */
     public async init() {
         this.commands = new Collection<string, CascadeCommand>()
-        for await (const commandFile of walk(this.options.commandDir)) {
-            if (!commandFile.isFile) continue;
-            const cmdPath = join(this.options.commandDir, commandFile.name)
+        console.log("[Cascade] Getting command files")
+        const files = (await recursiveReaddir(this.options.commandDir)).map(f => join('.', f)).filter(
+            (file: string) => [".js", ".ts"].includes(extname(file))
+        )
+        console.log("[Cascade] Command Files retrieved")
+        for (const commandFile of files) {
+            const cmdPath = resolve(commandFile)
             let command = await import("file://" + cmdPath)
             command = new command.default()
             this.commands.set(command.options.name, command)
         }
+        console.log("[Cascade] Loaded commands")
         this.emit("loaded")
     }
     /**

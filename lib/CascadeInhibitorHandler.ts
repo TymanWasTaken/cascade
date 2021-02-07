@@ -1,11 +1,12 @@
-import { join } from "https://deno.land/std@0.86.0/path/mod.ts";
-import { walk } from "https://deno.land/std@0.86.0/fs/mod.ts";
+import { extname, join, resolve } from "https://deno.land/std@0.86.0/path/mod.ts";
 import { Collection } from './Collection.ts'
 import { CascadeInhibitor } from './CascadeInhibitor.ts'
 import { CascadeClient } from "./CascadeClient.ts";
 import { EventEmitter } from "./EventEmitter.ts";
-import { CascadeMessage, convertMessage } from "./CascadeMessage.ts";
+import { CascadeMessage } from "./CascadeMessage.ts";
 import { CascadeCommand } from "./CascadeCommand.ts";
+import { recursiveReaddir } from "https://deno.land/x/recursive_readdir@v2.0.0/mod.ts";
+import { TermColors } from "./CascadeLogHandler.ts";
 
 /**
  * Options for the inhibitor handler
@@ -48,13 +49,18 @@ export class CascadeInhibitorHandler extends EventEmitter {
      */
     public async init() {
         this.inhibitors = new Collection<string, CascadeInhibitor>()
-        for await (const inhibitorFile of walk(this.options.inhibitorDir)) {
-            if (!inhibitorFile.isFile) continue;
-            const cmdPath = join(this.options.inhibitorDir, inhibitorFile.name)
-            const inhibitor: CascadeInhibitor = new (await import("file://" + cmdPath)).default()
+        console.log("[Cascade] Loading inhibitor files")
+        const files = (await recursiveReaddir(this.options.inhibitorDir)).map(f => join('.', f)).filter(
+            (file: string) => [".js", ".ts"].includes(extname(file))
+        )
+        console.log("[Cascade] Loaded inhibitor files")
+        for await (const inhibitorFile of files) {
+            const inhibitorPath = resolve(inhibitorFile)
+            const inhibitor: CascadeInhibitor = new (await import("file://" + inhibitorPath)).default()
             
             this.inhibitors.set(inhibitor.options.reason, inhibitor)
         }
+        console.log("[Cascade] Loaded inhibitors")
         this.emit("loaded")
     }
 
