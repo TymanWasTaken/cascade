@@ -1,3 +1,4 @@
+import { ArgumentParse, CascadeCommandArguments } from "./CascadeCommandHandler.ts";
 import {CascadeMessage} from "./CascadeMessage.ts";
 
 /**
@@ -45,7 +46,11 @@ export interface CascadeCommandOptions {
     /**
      * The description of this command
      */
-    description: CascadeCommandDescription
+    description: CascadeCommandDescription,
+    /**
+     * The arguments of this command
+     */
+    args: CascadeCommandArguments
 }
 
 /**
@@ -73,7 +78,7 @@ export class CascadeCommand {
      * Ran on command sent by user
      * @param message The message sent
      */
-    public async exec(message: CascadeMessage): Promise<any> {
+    public async exec(message: CascadeMessage, args?: ArgumentParse): Promise<any> {
         // pass
     }
 }

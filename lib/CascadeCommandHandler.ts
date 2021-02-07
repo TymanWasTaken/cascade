@@ -2,7 +2,7 @@ import { join, parse } from "https://deno.land/std@0.86.0/path/mod.ts";
 import { walk } from "https://deno.land/std@0.86.0/fs/mod.ts";
 import parser from "https://deno.land/x/yargs_parser/deno.ts";
 
-import {Collection, Message} from 'https://deno.land/x/discordeno@10.2.0/mod.ts'
+import {Collection, getChannel, getUser, Message} from 'https://deno.land/x/discordeno@10.2.0/mod.ts'
 import {CascadeCommand} from './CascadeCommand.ts'
 import { Arguments } from "https://deno.land/x/yargs_parser@v20.2.4-deno/build/lib/yargs-parser-types.d.ts";
 import { CascadeClient } from "./CascadeClient.ts";
@@ -14,6 +14,12 @@ type prefixType = ((message: Message) => string | string[]) | string | string[]
 function escapeRegExp(string: string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
+
+const userMentionReg = /<@!?(?<id>\d{15,20})>/
+const channelMentionReg = /<#(?<id>\d{15,20})>/
+const snowflakeReg = /\d{15,20}/
+
+export type ArgumentParse = Record<string, unknown>
 
 /**
  * Options for the command handler
@@ -29,11 +35,12 @@ export interface CascadeCommandHandlerOptions {
     prefix: prefixType
 }
 
-/**
- * A helper interface for the arguments passed to commands
- */
-export interface CascadeCommandArgs {
-    [argument: string]: any
+export interface CascadeCommandArguments {
+    [index: number]: { 
+        id: string,
+        type: string,
+        match?: 'content'
+    };
 }
 
 /**
@@ -66,6 +73,23 @@ export interface CascadeCommandParse {
     args: Arguments
 }
 
+export enum ArgFailReason {
+    INCORRECT_TYPE = "INCORRECT_TYPE",
+    INVALID_TYPE = "INVALID_TYPE",
+    MISSING = "MISSING"
+}
+
+export interface CascadeCommandArgParse {
+    success: boolean,
+    reason?: ArgFailReason,
+    problemArg?: {
+        id: string,
+        type: string,
+        match?: 'content'
+    }
+    parsed?: Record<string, unknown>
+}
+
 /**
  * The handler used to handle commands/command parsing
  */
@@ -82,6 +106,51 @@ export class CascadeCommandHandler extends EventEmitter {
      * The client for this handler
      */
     public client: CascadeClient | null
+
+    /**
+     * The list of types arguments can be parsed to
+     */
+    public static types: Record<string, (text: string, message: CascadeMessage) => Promise<any | null>> = {
+        'string': async (text) => {
+            return text
+        },
+        'number': async (text) => {
+            const num = Number(text)
+            return isNaN(num) ? null : num
+        },
+        'user': async (text, message) => {
+            const mentionMatch = text.match(userMentionReg)
+            if (mentionMatch) {
+                const user = await getUser(mentionMatch.groups?.id as string)
+                return user.id == mentionMatch.groups?.id as string ? user : null
+            }
+            const idMatch = text.match(snowflakeReg)
+            if (idMatch) {
+                const user = await getUser(text)
+                return user.id == text ? user : null
+            }
+            return null
+        },
+        'channel': async (text, message) => {
+            if (!message.guild) return null
+            const mentionMatch = text.match(channelMentionReg)
+            if (mentionMatch) {
+                const channel = message.guild.channels.get(mentionMatch.groups?.id as string)
+                return channel ? channel : null
+            }
+            const snowflakeMatch = text.match(snowflakeReg)
+            if (snowflakeMatch) {
+                const channel = message.guild.channels.get(text)
+                return channel ? channel : null
+            }
+            const channel = message.guild.channels.find((v) => v.name == text)
+            return channel ? channel : null
+        },
+        'snowflake': async (text) => {
+            return text.match(snowflakeReg) ? text : null
+        }
+    }
+
     /**
      * Creates the handler
      * @param options The options for this handler
@@ -172,6 +241,71 @@ export class CascadeCommandHandler extends EventEmitter {
         }
         return null
     }
+    public async parseArguments(message: CascadeMessage): Promise<CascadeCommandArgParse> {
+        const parsedArgs: Record<string, unknown> = {}
+        const parse = message.parse as CascadeCommandParse
+        const normal: { 
+            id: string,
+            type: string,
+            match?: 'content'
+        }[] = [];
+        const flags: { 
+            id: string,
+            type: string,
+            match?: 'content'
+        }[] = [];
+        const content: { 
+            id: string,
+            type: string,
+            match?: 'content'
+        }[] = [];
+        ((parse.command.options.args) as { 
+            id: string,
+            type: string,
+            match?: 'content'
+        }[]).forEach(arg => {
+            if (arg.type == 'flag') return flags.push(arg)
+            else if (arg.match == 'content') return content.push(arg)
+            else return normal.push(arg)
+        })
+        for (const argIndex in normal) {
+            const arg = parse.command.options.args[argIndex]
+            if (!CascadeCommandHandler.types[arg.type]) {
+                return {
+                    success: false,
+                    reason: ArgFailReason.INVALID_TYPE,
+                    problemArg: arg
+                }
+            }
+            const parsed = await CascadeCommandHandler.types[arg.type](String(parse.args._[argIndex]), message)
+            if (parsed == null) {
+                return {
+                    success: false,
+                    reason: ArgFailReason.INCORRECT_TYPE,
+                    problemArg: arg
+                }
+            }
+            parsedArgs[arg.id] = parsed
+        }
+        for (const flag of flags) {
+            if (!parse.args[flag.id]) {
+                return {
+                    success: false,
+                    reason: ArgFailReason.MISSING,
+                    problemArg: flag
+                }
+            }
+            parsedArgs[flag.id] = parse.args[flag.id]
+        }
+        for (const contentArg of content) {
+            const parsed = await CascadeCommandHandler.types[contentArg.type](parse.content, message)
+            parsedArgs[contentArg.id] = parsed
+        }
+        return {
+            success: true,
+            parsed: parsedArgs
+        }
+    }
     /**
      * Handles a message with this handler
      * @param message The message to handle
@@ -185,8 +319,16 @@ export class CascadeCommandHandler extends EventEmitter {
                 this.emit("notOwner", [message])
                 return
             }
-            parse.command.exec(convertMessage(message, this.client as CascadeClient, parse))
+            const msg = convertMessage(message, this.client as CascadeClient, parse)
+            const parsedArgs = await this.parseArguments(msg)
+            if (!parsedArgs.success) {
+                await message.reply("Failure parsing args")
+                console.log(parsedArgs)
+                return
+            }
+            parse.command.exec(msg, parsedArgs.parsed)
         }
+        this.emit("messageInvalid", [message])
     }
     /**
      * Checks if a user is an owner
