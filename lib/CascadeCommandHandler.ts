@@ -268,8 +268,8 @@ export class CascadeCommandHandler extends EventEmitter {
             else if (arg.match == 'content') return content.push(arg)
             else return normal.push(arg)
         })
-        for (const argIndex in normal) {
-            const arg = parse.command.options.args[argIndex]
+        let i = 0
+        for (const arg of normal) {
             if (!CascadeCommandHandler.types[arg.type]) {
                 return {
                     success: false,
@@ -277,7 +277,7 @@ export class CascadeCommandHandler extends EventEmitter {
                     problemArg: arg
                 }
             }
-            const parsed = await CascadeCommandHandler.types[arg.type](String(parse.args._[argIndex]), message)
+            const parsed = await CascadeCommandHandler.types[arg.type](String(parse.args._[i]), message)
             if (parsed == null) {
                 return {
                     success: false,
@@ -286,6 +286,7 @@ export class CascadeCommandHandler extends EventEmitter {
                 }
             }
             parsedArgs[arg.id] = parsed
+            i++
         }
         for (const flag of flags) {
             if (!parse.args[flag.id]) {
