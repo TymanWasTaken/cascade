@@ -4,6 +4,7 @@ import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
 import { CascadeListenerHandler } from "./CascadeListenerHandler.ts";
 import { CascadeLogHandler } from "./CascadeLogHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
+import { EventEmitter } from "./EventEmitter.ts";
 import { IntentUtil } from "./IntentUtil.ts";
 
 /**
@@ -35,7 +36,7 @@ export interface CascadeClientOptions {
 /**
  * The main starting point for bots, the client.
  */
-export class CascadeClient {
+export class CascadeClient extends EventEmitter {
     /**
      * The token of the bot
      */
@@ -66,6 +67,7 @@ export class CascadeClient {
      * @param options The options to use for this bot
      */
     public constructor(options: CascadeClientOptions) {
+        super()
         this.token = options.token
         this.intents = options.intents || IntentUtil.DEFAULT
         options.commandHandler.init()
@@ -90,134 +92,134 @@ export class CascadeClient {
             intents: this.intents,
             eventHandlers: {
                 applicationCommandCreate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "applicationCommandCreate", args)
+                    thisClient.emit("applicationCommandCreate", args)
                 },
                 botUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "botUpdate", args)
+                    thisClient.emit("botUpdate", args)
                 },
                 channelCreate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "channelCreate", args)
+                    thisClient.emit("channelCreate", args)
                 },
                 channelUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "channelUpdate", args)
+                    thisClient.emit("channelUpdate", args)
                 },
                 channelDelete(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "channelDelete", args)
+                    thisClient.emit("channelDelete", args)
                 },
                 debug(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "debug", args)
+                    thisClient.emit("debug", args)
                 },
                 dispatchRequirements(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "dispatchRequirements", args)
+                    thisClient.emit("dispatchRequirements", args)
                 },
                 guildBanAdd(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildBanAdd", args)
+                    thisClient.emit("guildBanAdd", args)
                 },
                 guildBanRemove(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildBanRemove", args)
+                    thisClient.emit("guildBanRemove", args)
                 },
                 guildCreate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildCreate", args)
+                    thisClient.emit("guildCreate", args)
                 },
                 guildLoaded(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildLoaded", args)
+                    thisClient.emit("guildLoaded", args)
                 },
                 guildUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildUpdate", args)
+                    thisClient.emit("guildUpdate", args)
                 },
                 guildDelete(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildDelete", args)
+                    thisClient.emit("guildDelete", args)
                 },
                 guildEmojisUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildEmojisUpdate", args)
+                    thisClient.emit("guildEmojisUpdate", args)
                 },
                 guildMemberAdd(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildMemberAdd", args)
+                    thisClient.emit("guildMemberAdd", args)
                 },
                 guildMemberRemove(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildMemberRemove", args)
+                    thisClient.emit("guildMemberRemove", args)
                 },
                 guildMemberUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "guildMemberUpdate", args)
+                    thisClient.emit("guildMemberUpdate", args)
                 },
                 heartbeat(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "heartbeat", args)
+                    thisClient.emit("heartbeat", args)
                 },
                 interactionCreate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "interactionCreate", args)
+                    thisClient.emit("interactionCreate", args)
                 },
                 messageCreate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "messageCreate", args)
+                    thisClient.emit("messageCreate", args)
                     thisClient.commandHandler.onMessage(args[0] as CascadeMessage)
                 },
                 messageDelete(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "messageDelete", args)
+                    thisClient.emit("messageDelete", args)
                 },
                 messageUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "messageUpdate", args)
+                    thisClient.emit("messageUpdate", args)
                 },
                 nicknameUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "nicknameUpdate", args)
+                    thisClient.emit("nicknameUpdate", args)
                 },
                 presenceUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "presenceUpdate", args)
+                    thisClient.emit("presenceUpdate", args)
                 },
                 raw(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "raw", args)
+                    thisClient.emit("raw", args)
                 },
                 rawGateway(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "rawGateway", args)
+                    thisClient.emit("rawGateway", args)
                 },
                 ready(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "ready", args)
+                    thisClient.emit("ready", args)
                 },
                 reactionAdd(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "reactionAdd", args)
+                    thisClient.emit("reactionAdd", args)
                 },
                 reactionRemove(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "reactionRemove", args)
+                    thisClient.emit("reactionRemove", args)
                 },
                 reactionRemoveAll(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "reactionRemoveAll", args)
+                    thisClient.emit("reactionRemoveAll", args)
                 },
                 reactionRemoveEmoji(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "reactionRemoveEmoji", args)
+                    thisClient.emit("reactionRemoveEmoji", args)
                 },
                 roleCreate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "roleCreate", args)
+                    thisClient.emit("roleCreate", args)
                 },
                 roleDelete(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "roleDelete", args)
+                    thisClient.emit("roleDelete", args)
                 },
                 roleUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "roleUpdate", args)
+                    thisClient.emit("roleUpdate", args)
                 },
                 roleGained(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "roleGained", args)
+                    thisClient.emit("roleGained", args)
                 },
                 roleLost(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "roleLost", args)
+                    thisClient.emit("roleLost", args)
                 },
                 shardReady(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "shardReady", args)
+                    thisClient.emit("shardReady", args)
                 },
                 typingStart(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "typingStart", args)
+                    thisClient.emit("typingStart", args)
                 },
                 voiceChannelJoin(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "voiceChannelJoin", args)
+                    thisClient.emit("voiceChannelJoin", args)
                 },
                 voiceChannelLeave(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "voiceChannelLeave", args)
+                    thisClient.emit("voiceChannelLeave", args)
                 },
                 voiceChannelSwitch(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "voiceChannelSwitch", args)
+                    thisClient.emit("voiceChannelSwitch", args)
                 },
                 voiceStateUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "voiceStateUpdate", args)
+                    thisClient.emit("voiceStateUpdate", args)
                 },
                 webhooksUpdate(...args: any[]) {
-                    thisClient.listenerHandler.onEvent("client", "webhooksUpdate", args)
+                    thisClient.emit("webhooksUpdate", args)
                 }
             }
         });
