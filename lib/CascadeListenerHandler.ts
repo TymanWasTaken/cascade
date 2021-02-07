@@ -81,7 +81,7 @@ export class CascadeListenerHandler {
     public async onEvent(emitter: string, event: string, params: any[]) {
         const handler = this.listeners.get(`${emitter}-${event}`)
         if (handler) {
-            handler.exec(params)
+            handler.exec(...params)
         }
     }
 }

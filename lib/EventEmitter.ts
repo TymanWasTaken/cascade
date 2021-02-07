@@ -10,15 +10,23 @@ export class EventEmitter {
     public once(event: string, handler: EventHandler) {
         this.registeredEvents.set("once-" + event, handler)
     }
-    public emit(event: string, ...args: any[]) {
+    public emit(event: string, args?: any[]) {
         if (this.registeredEvents.has("once-" + event)) {
             const handler = this.registeredEvents.get("once-" + event)
-            if (handler) handler(args)
+            if (args) {
+                if (handler) handler(...args)
+            } else {
+                if (handler) handler()
+            }
             this.registeredEvents.delete("once-" + event)
         }
         else if (this.registeredEvents.has(event)) {
             const handler = this.registeredEvents.get(event)
-            if (handler) handler(args)
+            if (args) {
+                if (handler) handler(...args)
+            } else {
+                if (handler) handler()
+            }
         }
     }
 }
