@@ -182,7 +182,8 @@ export class CascadeCommandHandler extends EventEmitter {
         if (parse != null) {
             if (parse.command.options.ownerOnly && !this.isOwner(message.author.id)) {
                 this.emit("notOwner")
-                return await message.send("You are not an owner!")
+                await message.send("You are not an owner!")
+                return
             }
             message.parse = parse
             message.client = this.client as CascadeClient
