@@ -7,6 +7,7 @@ import {CascadeCommand} from './CascadeCommand.ts'
 import { Arguments } from "https://deno.land/x/yargs_parser@v20.2.4-deno/build/lib/yargs-parser-types.d.ts";
 import { CascadeClient } from "./CascadeClient.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
+import { EventEmitter } from "./EventEmitter.ts";
 
 type prefixType = ((message: Message) => string | string[]) | string | string[]
 
@@ -68,7 +69,7 @@ export interface CascadeCommandParse {
 /**
  * The handler used to handle commands/command parsing
  */
-export class CascadeCommandHandler {
+export class CascadeCommandHandler extends EventEmitter {
     /**
      * The options for this handler
      */
@@ -86,6 +87,7 @@ export class CascadeCommandHandler {
      * @param options The options for this handler
      */
     constructor(options: CascadeCommandHandlerOptions) {
+        super()
         this.options = options
         this.commands = new Collection()
         this.client = null
@@ -120,6 +122,7 @@ export class CascadeCommandHandler {
             command = new command.default()
             this.commands.set(command.options.name, command)
         }
+        this.emit("loaded")
     }
     /**
      * Parses command data from a message
@@ -178,9 +181,11 @@ export class CascadeCommandHandler {
         
         if (parse != null) {
             if (parse.command.options.ownerOnly && !this.isOwner(message.author.id)) {
+                this.emit("notOwner")
                 return await message.send("You are not an owner!")
             }
             message.parse = parse
+            message.client = this.client as CascadeClient
             parse.command.exec(message)
         }
     }

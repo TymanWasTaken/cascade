@@ -1,8 +1,10 @@
-import {startBot} from "https://deno.land/x/discordeno@10.2.0/mod.ts";
-import {Intents} from "https://deno.land/x/discordeno@10.2.0/mod.ts"
+import { startBot } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
+import { Intents } from "https://deno.land/x/discordeno@10.2.0/mod.ts"
 import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
+import { CascadeListenerHandler } from "./CascadeListenerHandler.ts";
 import { CascadeLogHandler } from "./CascadeLogHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
+import { IntentUtil } from "./IntentUtil.ts";
 
 /**
  * The options for this bot
@@ -20,6 +22,10 @@ export interface CascadeClientOptions {
      * The command handler to use
      */
     commandHandler: CascadeCommandHandler,
+    /**
+     * The listener handler to use
+     */
+    listenerHandler: CascadeListenerHandler,
     /**
      * The owner(s) of this bot
      */
@@ -43,6 +49,10 @@ export class CascadeClient {
      */
     public commandHandler: CascadeCommandHandler
     /**
+     * The listener handler used for this bot
+     */
+    public listenerHandler: CascadeListenerHandler
+    /**
      * The log handlher used for this bot
      */
     public logHandler: CascadeLogHandler
@@ -57,9 +67,11 @@ export class CascadeClient {
      */
     public constructor(options: CascadeClientOptions) {
         this.token = options.token
-        this.intents = options.intents || []
+        this.intents = options.intents || IntentUtil.DEFAULT
         options.commandHandler.init()
+        options.listenerHandler.init()
         this.commandHandler = options.commandHandler
+        this.listenerHandler = options.listenerHandler
         this.commandHandler.client = this
         this.logHandler = new CascadeLogHandler({
             time: true,

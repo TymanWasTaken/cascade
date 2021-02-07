@@ -1,6 +1,26 @@
 import {CascadeMessage} from "./CascadeMessage.ts";
 
 /**
+ * The description of a command
+ */
+export interface CascadeCommandDescription {
+    /**
+     * The main description of this command
+     */
+    content: string,
+    /**
+     * How you use this command
+     * Format:
+     * commandname <required arg> [optional arg]
+     */
+    usage: string,
+    /**
+     * A few examples on how this command can be used
+     */
+    examples: string[]
+}
+
+/**
  * The options for a cascade command
  */
 export interface CascadeCommandOptions {
@@ -21,7 +41,11 @@ export interface CascadeCommandOptions {
      * If the command should only run for owners of the bot
      * @default false
      */
-    ownerOnly?: boolean
+    ownerOnly?: boolean,
+    /**
+     * The description of this command
+     */
+    description: CascadeCommandDescription
 }
 
 /**
@@ -32,6 +56,7 @@ export class CascadeCommand {
      * The options for this command
      */
     public options: CascadeCommandOptions
+    
     /**
      * Creates the command
      * @param options The options to use for this command, THIS MUST BE GIVEN DESPITE IT BEING OPTIONAL
