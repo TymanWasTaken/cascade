@@ -34,7 +34,7 @@ export class CascadeCommand {
     public options: CascadeCommandOptions
     /**
      * Creates the command
-     * @param options The options to use for this command
+     * @param options The options to use for this command, THIS MUST BE GIVEN DESPITE IT BEING OPTIONAL
      */
     public constructor(options?: CascadeCommandOptions) {
         if (options) {

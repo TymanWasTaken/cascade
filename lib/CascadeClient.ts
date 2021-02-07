@@ -1,8 +1,29 @@
 import {startBot} from "https://deno.land/x/discordeno@10.2.0/mod.ts";
-import {CascadeClientOptions} from "../mod.ts";
 import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
 import { CascadeLogHandler } from "./CascadeLogHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
+
+/**
+ * The options for this bot
+ */
+export interface CascadeClientOptions {
+    /**
+     * The token to use to log into discord with
+     */
+    token: string,
+    /**
+     * The intents to use for the bot
+     */
+    intents?: any,
+    /**
+     * The command handler to use
+     */
+    commandHandler: CascadeCommandHandler,
+    /**
+     * The owner(s) of this bot
+     */
+    owners: string | string[]
+}
 
 /**
  * The main starting point for bots, the client.
