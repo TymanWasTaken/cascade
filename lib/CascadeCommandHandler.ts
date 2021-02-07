@@ -321,6 +321,11 @@ export class CascadeCommandHandler extends EventEmitter {
                 return
             }
             const msg = convertMessage(message, this.client as CascadeClient, parse)
+            const inhibitorCheck = await this.client.inhibitorHandler.checkRun(msg, parse.command)
+            if (!inhibitorCheck.run) {
+                this.emit("blocked", [inhibitorCheck.blockedReason, message, parse.command])
+                return
+            }
             const parsedArgs = await this.parseArguments(msg)
             if (!parsedArgs.success) {
                 await message.reply("Failure parsing args")

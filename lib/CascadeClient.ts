@@ -1,6 +1,7 @@
 import { Application, botID, Channel, getUser, startBot, UserPayload } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
 import { Intents } from "https://deno.land/x/discordeno@10.2.0/mod.ts"
 import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
+import { CascadeInhibitorHandler } from "./CascadeInhibitorHandler.ts";
 import { CascadeListenerHandler } from "./CascadeListenerHandler.ts";
 import { CascadeLogHandler } from "./CascadeLogHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
@@ -28,6 +29,10 @@ export interface CascadeClientOptions {
      */
     listenerHandler: CascadeListenerHandler,
     /**
+     * The inhibitor handler to use
+     */
+    inhibitorHandler: CascadeInhibitorHandler,
+    /**
      * The owner(s) of this bot
      */
     owners: string | string[]
@@ -54,6 +59,10 @@ export class CascadeClient extends EventEmitter {
      */
     public listenerHandler: CascadeListenerHandler
     /**
+     * The listener handler used for this bot
+     */
+    public inhibitorHandler: CascadeInhibitorHandler
+    /**
      * The log handlher used for this bot
      */
     public logHandler: CascadeLogHandler
@@ -72,10 +81,13 @@ export class CascadeClient extends EventEmitter {
         this.intents = options.intents || IntentUtil.DEFAULT
         options.commandHandler.init()
         options.listenerHandler.init()
+        options.inhibitorHandler.init()
         this.commandHandler = options.commandHandler
         this.listenerHandler = options.listenerHandler
+        this.inhibitorHandler = options.inhibitorHandler
         this.commandHandler.client = this
         this.listenerHandler.client = this
+        this.inhibitorHandler.client = this
         this.logHandler = new CascadeLogHandler({
             time: true,
             colors: true

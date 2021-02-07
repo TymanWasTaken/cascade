@@ -7,10 +7,6 @@ import { CascadeClient } from "./CascadeClient.ts";
 import { EventEmitter } from "./EventEmitter.ts";
 import { convertMessage } from "./CascadeMessage.ts";
 
-function escapeRegExp(string: string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
 /**
  * Options for the listener handler
  */
@@ -71,6 +67,10 @@ export class CascadeListenerHandler extends EventEmitter {
         this.emit("loaded")
     }
 
+    /**
+     * Sets the emitters used by this handler
+     * @param emitters The emitters to use for this listener handler
+     */
     public async setEmitters(emitters: Record<string, EventEmitter>) {
         this.options.emitters = emitters
         this.init()
@@ -86,7 +86,13 @@ export class CascadeListenerHandler extends EventEmitter {
         const handler = this.listeners.get(`${emitter}-${event}`)
         if (handler) {
             // Convert messages to cascade message
-            params = params?.map(v => ('tts' in v) ? convertMessage(v, this.client as CascadeClient, null) : v)
+            params = params?.map(v => {
+                try {
+                    return ('tts' in v) ? convertMessage(v, this.client as CascadeClient, null) : v
+                } catch {
+                    return v
+                }
+            })
             if (params) handler.exec(...params)
             else handler.exec()
         }

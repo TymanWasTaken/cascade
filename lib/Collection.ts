@@ -11,6 +11,12 @@ export class Collection<K, V> extends Map {
     public delete(key: K): boolean {
         return super.delete(key)
     }
+    public entries(): IterableIterator<[K, V]> {
+        return super.entries()
+    }
+    public values(): IterableIterator<V> {
+        return super.values()
+    }
     /**
      * A port of Array.some to maps.
      * @param filter A function returning true or false if the value matches the criteria.
