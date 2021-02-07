@@ -15,17 +15,17 @@
 
 The cascade project is a library for the [discord-deno](https://github.com/discordeno/discordeno) that allows dynamic and easy command handling with many features, such as easily creatable bots that allow lots of customization
 
-**Website**: https://cascade.tyman.tech/ (will make it better later)
+**Website**: soon™
 
 **Docs**: soon™
 
-<h2 align="center">Usage</h1>
+<h2 align="center">Usage</h2>
 
 <h3>Prerequisites</h3>
 
 - <a href="https://deno.land/">Deno</a>
 
-<h2 align="center">Contributing</h1>
+<h2 align="center">Contributing</h2>
 
 You are free to report bugs or contribute to this project. Just open <a href="../../issues">Issues</a> or <a href="../../pulls">Pull Requests</a> and the Developer team will look into them.
 
