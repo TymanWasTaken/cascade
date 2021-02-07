@@ -29,7 +29,7 @@ The cascade project is a library for the [discordeno](https://github.com/discord
 
 <h2 align="center">Contributing</h2>
 
-You are free to report bugs or contribute to this project. Just open <a href="../../issues">Issues</a> or <a href="../../pulls">Pull Requests</a> and the Developer team will look into them.
+You are free to report bugs or contribute to this project. Just open <a href="https://github.com/TymanWasTaken/cascade/issues">Issues</a> or <a href="https://github.com/TymanWasTaken/cascade/pulls">Pull Requests</a> and the Developer team will look into them.
 
 <h2 align="center">Credits</h2>
 
