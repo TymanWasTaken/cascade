@@ -83,8 +83,8 @@ export class CascadeClient extends EventEmitter {
         this.owners = options.owners
     }
 
-    public async user() {
-        return await getUser(botID)
+    public user() {
+        return getUser(botID)
     }
 
     /**
