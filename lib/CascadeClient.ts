@@ -1,4 +1,4 @@
-import { Application, Channel, startBot, UserPayload } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
+import { Application, botID, Channel, getUser, startBot, UserPayload } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
 import { Intents } from "https://deno.land/x/discordeno@10.2.0/mod.ts"
 import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
 import { CascadeListenerHandler } from "./CascadeListenerHandler.ts";
@@ -75,6 +75,7 @@ export class CascadeClient extends EventEmitter {
         this.commandHandler = options.commandHandler
         this.listenerHandler = options.listenerHandler
         this.commandHandler.client = this
+        this.listenerHandler.client = this
         this.logHandler = new CascadeLogHandler({
             time: true,
             colors: true
@@ -82,10 +83,14 @@ export class CascadeClient extends EventEmitter {
         this.owners = options.owners
     }
 
+    public async user() {
+        return await getUser(botID)
+    }
+
     /**
      * Logs into discord with this client
      */
-    public login() {
+    public async login() {
         const thisClient = this
         startBot({
             token: this.token,

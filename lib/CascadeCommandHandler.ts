@@ -6,7 +6,7 @@ import {Collection, Message} from 'https://deno.land/x/discordeno@10.2.0/mod.ts'
 import {CascadeCommand} from './CascadeCommand.ts'
 import { Arguments } from "https://deno.land/x/yargs_parser@v20.2.4-deno/build/lib/yargs-parser-types.d.ts";
 import { CascadeClient } from "./CascadeClient.ts";
-import { CascadeMessage } from "./CascadeMessage.ts";
+import { CascadeMessage, convertMessage } from "./CascadeMessage.ts";
 import { EventEmitter } from "./EventEmitter.ts";
 
 type prefixType = ((message: Message) => string | string[]) | string | string[]
@@ -177,6 +177,7 @@ export class CascadeCommandHandler extends EventEmitter {
      * @param message The message to handle
      */
     public async onMessage(message: CascadeMessage) {
+        if (!this.client) return
         const parse = this.parseCommand(message)
         
         if (parse != null) {
@@ -184,9 +185,7 @@ export class CascadeCommandHandler extends EventEmitter {
                 this.emit("notOwner", [message])
                 return
             }
-            message.parse = parse
-            message.client = this.client as CascadeClient
-            parse.command.exec(message)
+            parse.command.exec(convertMessage(message, this.client as CascadeClient, parse))
         }
     }
     /**

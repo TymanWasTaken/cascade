@@ -2,6 +2,13 @@ import {Message} from "https://deno.land/x/discordeno@10.2.0/mod.ts"
 import { CascadeClient } from "./CascadeClient.ts"
 import {CascadeCommandParse} from "./CascadeCommandHandler.ts"
 
+export const convertMessage = (message: Message, client: CascadeClient, parse: CascadeCommandParse | null) => {
+    const newMessage = message as CascadeMessage
+    newMessage.parse = parse
+    newMessage.client = client
+    return newMessage
+}
+
 /**
  * An extended interface for Message to add custom properties.
  */
@@ -9,7 +16,7 @@ export interface CascadeMessage extends Message {
     /**
      * An opject containing command parse data for this message.
      */
-    parse: CascadeCommandParse,
+    parse: CascadeCommandParse | null,
     /**
      * The {CascadeClient} that recieved this message
      */

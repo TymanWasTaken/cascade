@@ -1,9 +1,11 @@
+import { Message } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
 import { join } from "https://deno.land/std@0.86.0/path/mod.ts";
 import { walk } from "https://deno.land/std@0.86.0/fs/mod.ts";
 import { Collection } from './Collection.ts'
 import { CascadeListener } from './CascadeListener.ts'
 import { CascadeClient } from "./CascadeClient.ts";
 import { EventEmitter } from "./EventEmitter.ts";
+import { convertMessage } from "./CascadeMessage.ts";
 
 function escapeRegExp(string: string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
@@ -83,6 +85,8 @@ export class CascadeListenerHandler extends EventEmitter {
     public async onEvent(emitter: string, event: string, params?: any[]) {
         const handler = this.listeners.get(`${emitter}-${event}`)
         if (handler) {
+            // Convert messages to cascade message
+            params = params?.map(v => ('tts' in v) ? convertMessage(v, this.client as CascadeClient, null) : v)
             if (params) handler.exec(...params)
             else handler.exec()
         }
