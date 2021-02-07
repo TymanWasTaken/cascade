@@ -312,7 +312,7 @@ export class CascadeCommandHandler extends EventEmitter {
      * @param message The message to handle
      */
     public async onMessage(message: CascadeMessage) {
-        if (!this.client) return
+        if (!this.client?.ready) return
         const parse = this.parseCommand(message)
         
         if (parse != null) {

@@ -70,6 +70,10 @@ export class CascadeClient extends EventEmitter {
      * The owners of this bot
      */
     public owners: string | string[]
+    /**
+     * If this client is ready or not
+     */
+    public ready: boolean = false
 
     /**
      * Creats the client
@@ -189,6 +193,7 @@ export class CascadeClient extends EventEmitter {
                 },
                 ready(...args: any[]) {
                     thisClient.emit("ready", args)
+                    thisClient.ready = true
                 },
                 reactionAdd(...args: any[]) {
                     thisClient.emit("reactionAdd", args)
