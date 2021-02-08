@@ -50,7 +50,11 @@ export interface CascadeCommandOptions {
     /**
      * The arguments of this command
      */
-    args: CascadeCommandArguments
+    args: CascadeCommandArguments,
+    /**
+     * A list of whitelisted guild ids this command can run in
+     */
+    guildWhitelist?: string[]
 }
 
 /**
