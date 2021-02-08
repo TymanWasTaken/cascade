@@ -49,18 +49,18 @@ export class CascadeInhibitorHandler extends EventEmitter {
      */
     public async init() {
         this.inhibitors = new Collection<string, CascadeInhibitor>()
-        console.log("[Cascade] Loading inhibitor files")
+        this.client?.logHandler.verbose("[Cascade] Loading inhibitor files")
         const files = (await recursiveReaddir(this.options.inhibitorDir)).map(f => join('.', f)).filter(
             (file: string) => [".js", ".ts"].includes(extname(file))
         )
-        console.log("[Cascade] Loaded inhibitor files")
+        this.client?.logHandler.verbose("[Cascade] Loaded inhibitor files")
         for await (const inhibitorFile of files) {
             const inhibitorPath = resolve(inhibitorFile)
             const inhibitor: CascadeInhibitor = new (await import("file://" + inhibitorPath)).default()
             
             this.inhibitors.set(inhibitor.options.reason, inhibitor)
         }
-        console.log("[Cascade] Loaded inhibitors")
+        this.client?.logHandler.verbose("[Cascade] Loaded inhibitors")
         this.emit("loaded")
     }
 

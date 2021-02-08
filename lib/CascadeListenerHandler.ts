@@ -55,11 +55,11 @@ export class CascadeListenerHandler extends EventEmitter {
         this.listeners.clear()
         if (!this.options.emitters) return
         this.listeners = new Collection<string, CascadeListener>()
-        console.log("[Cascade] Loading listener files")
+        this.client?.logHandler.verbose("[Cascade] Loading listener files")
         const files = (await recursiveReaddir(this.options.listenerDir)).map(f => join('.', f)).filter(
             (file: string) => [".js", ".ts"].includes(extname(file))
         )
-        console.log("[Cascade] Loaded listener files")
+        this.client?.logHandler.verbose("[Cascade] Loaded listener files")
         for await (const listenerFile of files) {
             const listenerPath = resolve(listenerFile)
             const listener: CascadeListener = new (await import("file://" + listenerPath)).default()
@@ -69,7 +69,7 @@ export class CascadeListenerHandler extends EventEmitter {
             })
             this.listeners.set(`${listener.options.emitter}-${listener.options.event}`, listener)
         }
-        console.log("[Cascade] Loaded listeners")
+        this.client?.logHandler.verbose("[Cascade] Loaded listeners")
         this.emit("loaded")
     }
 

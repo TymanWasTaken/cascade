@@ -118,7 +118,7 @@ export class CascadeClient extends EventEmitter {
      */
     public async login() {
         const thisClient = this
-        console.log("[Cascade] Logging in")
+        this.logHandler.verbose("[Cascade] Logging in")
         startBot({
             token: this.token,
             intents: this.intents,
@@ -257,6 +257,6 @@ export class CascadeClient extends EventEmitter {
                 }
             }
         });
-        console.log("[Cascade] Logged in")
+        this.logHandler.verbose("[Cascade] Logged in")
     }
 }

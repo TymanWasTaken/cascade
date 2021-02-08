@@ -182,18 +182,18 @@ export class CascadeCommandHandler extends EventEmitter {
      */
     public async init() {
         this.commands = new Collection<string, CascadeCommand>()
-        console.log("[Cascade] Getting command files")
+        this.client?.logHandler.verbose("[Cascade] Getting command files")
         const files = (await recursiveReaddir(this.options.commandDir)).map(f => join('.', f)).filter(
             (file: string) => [".js", ".ts"].includes(extname(file))
         )
-        console.log("[Cascade] Command Files retrieved")
+        this.client?.logHandler.verbose("[Cascade] Command Files retrieved")
         for (const commandFile of files) {
             const cmdPath = resolve(commandFile)
             let command = await import("file://" + cmdPath)
             command = new command.default()
             this.commands.set(command.options.name, command)
         }
-        console.log("[Cascade] Loaded commands")
+        this.client?.logHandler.verbose("[Cascade] Loaded commands")
         this.emit("loaded")
     }
     /**
