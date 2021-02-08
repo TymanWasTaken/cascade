@@ -11,6 +11,7 @@
 [![uses badges](https://img.shields.io/badge/Uses-Badges-yellow?style=for-the-badge)](https://shields.io)
 [![works probably](https://img.shields.io/badge/Works-Probably-green?style=for-the-badge)](https://shields.io)
 [![made with typescript](https://img.shields.io/badge/Made%20With-Typescript-orange?style=for-the-badge)](https://www.typescriptlang.org/)
+[![forthebadge](https://forthebadge.com/images/badges/compatibility-club-penguin.svg)](https://forthebadge.com)
 </div>
 
 The cascade project is a library for the [discordeno](https://github.com/discordeno/discordeno) library that allows dynamic and easy command handling with many features, such as easily creatable bots that allow lots of customization
