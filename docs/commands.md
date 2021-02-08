@@ -81,7 +81,7 @@ export default class ExampleCommand extends CascadeCommand {
 }
 ```
 
-As seen in the code above, `CascadeMessage is an extension of Message` is an extension of `Message`. It adds three properties as seen below.
+As seen in the code above, `CascadeMessage` is an extension of `Message`. It adds three properties as seen below.
 - `CascadeMessage#parse` - Info about how the message was parsed, contains things like alias used and prefix used.
 - `CascadeMessage#client` - The curent `CascadeClient` that recievied this message
 - `CascadeMessage#globalFlags` - Information about the global flags in this message (no current guide for this, will be made later)
