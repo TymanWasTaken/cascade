@@ -33,7 +33,12 @@ export interface CascadeCommandHandlerOptions {
     /**
      * The prefix to use for messages (can be string, array of strings, or a function returning a string or array of strings)
      */
-    prefix: prefixType
+    prefix: prefixType,
+    /**
+     * The global flags to parse for messages
+     * DO NOT INCLUDE THE -- IN THIS
+     */
+    globalFlags?: string[]
 }
 
 export interface CascadeCommandArguments {
@@ -88,7 +93,8 @@ export interface CascadeCommandArgParse {
         type: string,
         match?: 'content'
     }
-    parsed?: Record<string, unknown>
+    parsed?: Record<string, unknown>,
+    globalFlags?: Record<string, boolean | string>
 }
 
 /**
@@ -240,6 +246,7 @@ export class CascadeCommandHandler extends EventEmitter {
     }
     public async parseArguments(message: CascadeMessage): Promise<CascadeCommandArgParse> {
         const parsedArgs: Record<string, unknown> = {}
+        const globalParsedFlags: Record<string, boolean | string> = {}
         const parse = message.parse as CascadeCommandParse
         const normal: {
             id: string,
@@ -299,9 +306,15 @@ export class CascadeCommandHandler extends EventEmitter {
             const parsed = await CascadeCommandHandler.types[contentArg.type](parse.content, message)
             parsedArgs[contentArg.id] = parsed
         }
+        if (this.options.globalFlags) {
+            for (const globalFlag of this.options.globalFlags) {
+                globalParsedFlags[globalFlag] = parse.args[globalFlag]
+            }
+        }
         return {
             success: true,
-            parsed: parsedArgs
+            parsed: parsedArgs,
+            globalFlags: globalParsedFlags
         }
     }
     /**
@@ -331,9 +344,10 @@ export class CascadeCommandHandler extends EventEmitter {
             }
             const parsedArgs = await this.parseArguments(msg)
             if (!parsedArgs.success) {
-                await message.reply("Failure parsing args")
+                this.emit("argumentFailure", [message, parsedArgs])
                 return
             }
+            msg.globalFlags = parsedArgs.globalFlags
             parse.command.exec(msg, parsedArgs.parsed)
         }
         this.emit("messageInvalid", [message])

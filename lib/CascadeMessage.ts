@@ -20,5 +20,9 @@ export interface CascadeMessage extends Message {
     /**
      * The {CascadeClient} that recieved this message
      */
-    client: CascadeClient
+    client: CascadeClient,
+    /**
+     * The values of the global flags in this message
+     */
+    globalFlags?: Record<string, boolean | string>
 }
