@@ -6,8 +6,7 @@
 
 <div align="center">
 
-[![CodeFactor](https://www.codefactor.io/repository/github/tymanwastaken/cascade/badge)](https://www.codefactor.io/repository/github/tymanwastaken/cascade)
-<br>
+[![CodeFactor](https://img.shields.io/codefactor/grade/github/TymanWasTaken/cascade?style=for-the-badge)](https://www.codefactor.io/repository/github/tymanwastaken/cascade)
 [![discord badge](https://img.shields.io/badge/Join%20the-Discord-blue?style=for-the-badge)](https://discord.gg/Dsue9NYRZs)
 [![uses badges](https://img.shields.io/badge/Uses-Badges-yellow?style=for-the-badge)](https://shields.io)
 [![works probably](https://img.shields.io/badge/Works-Probably-green?style=for-the-badge)](https://shields.io)
