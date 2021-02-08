@@ -332,7 +332,6 @@ export class CascadeCommandHandler extends EventEmitter {
             const parsedArgs = await this.parseArguments(msg)
             if (!parsedArgs.success) {
                 await message.reply("Failure parsing args")
-                console.log(parsedArgs)
                 return
             }
             parse.command.exec(msg, parsedArgs.parsed)
