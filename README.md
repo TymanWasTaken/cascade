@@ -8,10 +8,10 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/tymanwastaken/cascade/badge)](https://www.codefactor.io/repository/github/tymanwastaken/cascade)
 <br>
-![discord badge](https://img.shields.io/badge/Join%20the-Discord-blue?style=for-the-badge&link=https://discord.gg/Dsue9NYRZs)
-![uses badges](https://img.shields.io/badge/Uses-Badges-yellow?style=for-the-badge)
-![works probably](https://img.shields.io/badge/Works-Probably-green?style=for-the-badge)
-![made with typescript](https://img.shields.io/badge/Made%20With-Typescript-orange?style=for-the-badge)
+[![discord badge](https://img.shields.io/badge/Join%20the-Discord-blue?style=for-the-badge)](https://discord.gg/Dsue9NYRZs)
+[![uses badges](https://img.shields.io/badge/Uses-Badges-yellow?style=for-the-badge)](https://shields.io)
+[![works probably](https://img.shields.io/badge/Works-Probably-green?style=for-the-badge)](https://shields.io)
+[![made with typescript](https://img.shields.io/badge/Made%20With-Typescript-orange?style=for-the-badge)](https://typescriptlang.org)
 </div>
 
 The cascade project is a library for the [discordeno](https://github.com/discordeno/discordeno) library that allows dynamic and easy command handling with many features, such as easily creatable bots that allow lots of customization
