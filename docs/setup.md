@@ -49,7 +49,7 @@ client.listenerHandler.setEmitters({ // This sets all the emitters that you can 
 });
 ```
 
-This sets up the base for your bot and where it all starts. If you run it now, it will error because it can't find the listeners, commands, and inhibitors directories. To fix this, create all of those. the bot should then run.
+This sets up the base for your bot and where it all starts. If you run it now, it will error because it can't find the listeners, commands, and inhibitors directories. To fix this, create all of those. Then the bot should then run.
 
 ## Next steps
 
