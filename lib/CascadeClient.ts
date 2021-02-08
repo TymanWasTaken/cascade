@@ -1,5 +1,4 @@
-import { botID, getUser, startBot } from "https://deno.land/x/discordeno@10.2.0/mod.ts";
-import { Intents } from "https://deno.land/x/discordeno@10.2.0/mod.ts"
+import { botID, getUser, startBot, Intents } from "../deps.ts";
 import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
 import { CascadeInhibitorHandler } from "./CascadeInhibitorHandler.ts";
 import { CascadeListenerHandler } from "./CascadeListenerHandler.ts";

@@ -1,13 +1,9 @@
-import { join, extname } from "https://deno.land/std@0.86.0/path/mod.ts";
-import parser from "https://deno.land/x/yargs_parser/deno.ts";
-import { recursiveReaddir } from "https://deno.land/x/recursive_readdir/mod.ts";
-import {Collection, getUser, Message} from 'https://deno.land/x/discordeno@10.2.0/mod.ts'
+import { join, extname, recursiveReaddir, Collection, getUser, Message, resolve, parser } from "../deps.ts";
 import {CascadeCommand} from './CascadeCommand.ts'
 import { Arguments } from "https://deno.land/x/yargs_parser@v20.2.4-deno/build/lib/yargs-parser-types.d.ts";
 import { CascadeClient } from "./CascadeClient.ts";
 import { CascadeMessage, convertMessage } from "./CascadeMessage.ts";
 import { EventEmitter } from "./EventEmitter.ts";
-import { resolve } from "https://deno.land/std@0.86.0/path/win32.ts";
 import { TermColors } from "./CascadeLogHandler.ts";
 
 type prefixType = ((message: Message) => string | string[]) | string | string[]

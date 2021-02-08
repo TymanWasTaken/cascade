@@ -1,4 +1,4 @@
-import { Intents } from "https://deno.land/x/discordeno@10.2.0/mod.ts"
+import { Intents } from "../deps.ts"
 
 /**
  * An "enum" that contains useful intent values (not actually an enum because typescript wouldn't let me do that)
