@@ -1,11 +1,9 @@
-import { extname, join } from "https://deno.land/std@0.86.0/path/mod.ts";
+import { extname, join, resolve, recursiveReaddir } from "../deps.ts";
 import { Collection } from './Collection.ts'
 import { CascadeListener } from './CascadeListener.ts'
 import { CascadeClient } from "./CascadeClient.ts";
 import { EventEmitter } from "./EventEmitter.ts";
 import { convertMessage } from "./CascadeMessage.ts";
-import { recursiveReaddir } from "https://deno.land/x/recursive_readdir@v2.0.0/mod.ts";
-import { resolve } from "https://deno.land/std@0.86.0/path/win32.ts";
 import { TermColors } from "./CascadeLogHandler.ts";
 
 /**
