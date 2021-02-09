@@ -1,8 +1,8 @@
 # Commands
 
-Every command is in a seperate file, in the `commands` directory (or a different one specified in your CascadeCommandHandlerOptions)
+Every command is in a seperate file, located in the `commands` directory, or a different one, as specified in your CascadeCommandHandlerOptions.
 
-To create a new command, make a new file called whatever you want in your commands directory.
+To create a new command, make a new file in your commands directory. It can have any name, as long as the extension is `.ts`.
 
 In this file, create an new class extending `CascadeCommand` and make it the default export.
 ```ts
@@ -13,7 +13,7 @@ export default class ExampleCommand extends CascadeCommand {
 }
 ```
 
-You then need to create the constructor, which contains the command options like name, aliases, arguments, etc.
+You then need to create the constructor, which contains the command options such as the name, aliases, arguments, etc.
 ```ts
 import { CascadeCommand } from "https://deno.land/x/cascade@1.0.3/mod.ts";
 
@@ -48,7 +48,7 @@ List of currently available argument types:
 - channel
 - snowflake
 
-Now that you have the options all set up, create the `exec` function, which is what is ran when the command is executed.
+Now that you have the options all set up, create the `exec` function, which is run when the command is executed.
 
 ```ts
 import { CascadeCommand } from "https://deno.land/x/cascade@1.0.3/mod.ts";
@@ -82,7 +82,8 @@ export default class ExampleCommand extends CascadeCommand {
 }
 ```
 
-As seen in the code above, `CascadeMessage` is an extension of `Message`. It adds three properties as seen below.
+As seen in the code above, `CascadeMessage` is an extension of `Message`. It adds three properties, as seen below:
+
 - `CascadeMessage#parse` - Info about how the message was parsed, contains things like alias used and prefix used.
 - `CascadeMessage#client` - The curent `CascadeClient` that recievied this message
 - `CascadeMessage#globalFlags` - Information about the global flags in this message (no current guide for this, will be made later)
