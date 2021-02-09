@@ -20,7 +20,7 @@
 		"prefix": "cevent",
 		"body": [
 			"$1(...args: any[]) {",
-			"    thisClient.listenerHandler.onEvent(\"client\", \"$1\", args)",
+			"	thisClient.listenerHandler.onEvent(\"client\", \"$1\", args)",
 			"},"
 		],
 		"description": "Trigger event on listener handler"

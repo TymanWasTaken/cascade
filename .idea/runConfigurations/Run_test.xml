@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run test" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/test.ts" programParameters="run">
-    <method v="2" />
+	<method v="2" />
   </configuration>
 </component>

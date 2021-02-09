@@ -18,26 +18,26 @@ You then need to create the constructor, which contains the command options like
 import { CascadeCommand } from "https://deno.land/x/cascade@1.0.3/mod.ts";
 
 export default class ExampleCommand extends CascadeCommand {
-    public constructor() {
-        super({
-            name: 'example', // The name stored in the library, this has no affect on the command parsing.
-            aliases: ['example', 'ex'], // This is how the commands are parsed, keep the first value as the main wait to run the command.
-            description: {
-                content: "An example command.", // The main description text.
-                usage: "example <arg1>", // How the command is used, wrap required arguments in <> and optional ones in [].
-                examples: [ // An array of example uses that would work with this command
-                    "example hi",
-                    "example hello",
-                ],
-            },
-            args: [ // An array of arguments for this command
-                {
-                    id: 'arg1', // The name of the argument in your code
-                    type: 'string' // The type of the arg, see below for a list
-                }
-            ]
-        })
-    }
+	public constructor() {
+		super({
+			name: 'example', // The name stored in the library, this has no affect on the command parsing.
+			aliases: ['example', 'ex'], // This is how the commands are parsed, keep the first value as the main wait to run the command.
+			description: {
+				content: "An example command.", // The main description text.
+				usage: "example <arg1>", // How the command is used, wrap required arguments in <> and optional ones in [].
+				examples: [ // An array of example uses that would work with this command
+					"example hi",
+					"example hello",
+				],
+			},
+			args: [ // An array of arguments for this command
+				{
+					id: 'arg1', // The name of the argument in your code
+					type: 'string' // The type of the arg, see below for a list
+				}
+			]
+		})
+	}
 }
 ```
 
@@ -54,30 +54,30 @@ Now that you have the options all set up, create the `exec` function, which is w
 import { CascadeCommand } from "https://deno.land/x/cascade@1.0.3/mod.ts";
 
 export default class ExampleCommand extends CascadeCommand {
-    public constructor() {
-        super({
-            name: 'example',
-            aliases: ['example', 'ex'],
-            description: {
-                content: "An example command.",
-                usage: "example <arg1>",
-                examples: [
-                    "example hi",
-                    "example hello",
-                ],
-            },
-            args: [
-                {
-                    id: 'arg1',
-                    type: 'string'
-                }
-            ]
-        })
-    }
-    // CascadeMessage is an extension of Message from discordeno to add extra properties like raw parse data, global flags, and client.
-    public async exec(message: CascadeMessage) {
-        // Do whatever you want here
-    }
+	public constructor() {
+		super({
+			name: 'example',
+			aliases: ['example', 'ex'],
+			description: {
+				content: "An example command.",
+				usage: "example <arg1>",
+				examples: [
+					"example hi",
+					"example hello",
+				],
+			},
+			args: [
+				{
+					id: 'arg1',
+					type: 'string'
+				}
+			]
+		})
+	}
+	// CascadeMessage is an extension of Message from discordeno to add extra properties like raw parse data, global flags, and client.
+	public async exec(message: CascadeMessage) {
+		// Do whatever you want here
+	}
 }
 ```
 
