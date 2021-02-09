@@ -71,7 +71,8 @@ export default class ExampleCommand extends CascadeCommand {
 					id: 'arg1',
 					type: 'string'
 				}
-			]
+			],
+			userPermissions: ["MANAGE_MESSAGES"] // This specifies the permissions the user needs to run the command, if they are missing it, userMissingPermissions is emitted on commandHandler.
 		})
 	}
 	// CascadeMessage is an extension of Message from discordeno to add extra properties like raw parse data, global flags, and client.
