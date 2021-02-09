@@ -1,3 +1,4 @@
+import { Permission } from "../deps.ts";
 import { ArgumentParse, CascadeCommandArguments } from "./CascadeCommandHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
 
@@ -54,7 +55,11 @@ export interface CascadeCommandOptions {
 	/**
 	 * A list of whitelisted guild ids this command can run in
 	 */
-	guildWhitelist?: string[]
+	guildWhitelist?: string[],
+	/**
+	 * Permissions the user needs to have for this command to run
+	 */
+	userPermissions?: Permission[]
 }
 
 /**

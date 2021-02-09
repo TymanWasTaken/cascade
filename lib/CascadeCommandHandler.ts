@@ -1,4 +1,4 @@
-import { join, extname, recursiveReaddir, Collection, getUser, Message, resolve, parser } from "../deps.ts";
+import { join, extname, recursiveReaddir, Collection, getUser, Message, resolve, parser, memberIDHasPermission } from "../deps.ts";
 import { CascadeCommand } from './CascadeCommand.ts'
 import { Arguments } from "https://deno.land/x/yargs_parser@v20.2.4-deno/build/lib/yargs-parser-types.d.ts";
 import { CascadeClient } from "./CascadeClient.ts";
@@ -337,6 +337,18 @@ export class CascadeCommandHandler extends EventEmitter {
 			if (!inhibitorCheck.run) {
 				this.emit("blocked", [inhibitorCheck.blockedReason, message, parse.command])
 				return
+			}
+			if (parse.command.options.userPermissions) {
+				for (const permission of parse.command.options.userPermissions) {
+					if (!msg.guild) {
+						this.emit("notGuild", [msg])
+						return
+					}
+					if (!(await memberIDHasPermission(msg.author.id, msg.guild.id, [permission]))) {
+						this.emit("userMissingPermission", [msg, permission])
+						return
+					}
+				}
 			}
 			const parsedArgs = await this.parseArguments(msg)
 			if (!parsedArgs.success) {
