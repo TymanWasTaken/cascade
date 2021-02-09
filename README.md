@@ -15,6 +15,8 @@
 
 The cascade project is a library for the [discordeno](https://github.com/discordeno/discordeno) library that allows dynamic and easy command handling with many features, such as easily creatable bots that allow lots of customization
 
+# WARNING: THIS IS A WORK IN PROGRESS AND ANYTHING HERE CURRENTLY WILL LIKELY BE CHANGED LATER.
+
 **Website/Docs**: https://cascade.tyman.tech (WIP)
 
 <h2 align="center">Usage</h2>
@@ -30,6 +32,6 @@ You are free to report bugs or contribute to this project. Just open <a href="ht
 
 <h2 align="center">Credits</h2>
 
-- <a href="https://github.com/discordeno/discordeno">discord-deno</a> - Creating the library cascade is built upon
+- <a href="https://github.com/discordeno/discordeno">discordeno</a> - Creating the library cascade is built upon
 - <a href="https://discord-akairo.github.io/">discord-akairo</a> - A big inspiration for a lot of features in this
 
