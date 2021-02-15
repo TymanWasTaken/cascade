@@ -16,7 +16,8 @@
 				"--inspect-brk",
 				"--allow-all"
 			],
-			"attachSimplePort": 9229
+			"attachSimplePort": 9229,
+			"stopOnEntry": false
 		}
 	]
 }

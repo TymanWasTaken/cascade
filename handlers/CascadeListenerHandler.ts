@@ -1,10 +1,10 @@
 import { extname, join, resolve, recursiveReaddir } from "../deps.ts";
-import { Collection } from './Collection.ts'
-import { CascadeListener } from './CascadeListener.ts'
-import { CascadeClient } from "./CascadeClient.ts";
-import { EventEmitter } from "./EventEmitter.ts";
-import { convertMessage } from "./CascadeMessage.ts";
-import { TermColors } from "./CascadeLogHandler.ts";
+import { Collection } from '../struct/Collection.ts'
+import { CascadeListener } from '../struct/CascadeListener.ts'
+import { CascadeClient } from "../struct/CascadeClient.ts";
+import { EventEmitter } from "../struct/EventEmitter.ts";
+import { convertMessage } from "../struct/CascadeMessage.ts";
+import { InvalidDirectoryError } from "../errors/InvalidDirectory.ts";
 
 /**
  * Options for the listener handler
@@ -35,29 +35,37 @@ export class CascadeListenerHandler extends EventEmitter {
 	/**
 	 * The client for this handler
 	 */
-	public client: CascadeClient | null
+	public client: CascadeClient
 	/**
 	 * Creates the handler
 	 * @param options The options for this handler
 	 */
-	constructor(options: CascadeListenerHandlerOptions) {
+	constructor(client: CascadeClient, options: CascadeListenerHandlerOptions) {
 		super()
 		this.options = options
 		this.listeners = new Collection()
-		this.client = null
+		this.client = client
 	}
 	/**
 	 * Initializes the listeners in this handler
 	 */
-	public async init() {
+	public async init(silent: boolean = false) {
 		this.listeners.clear()
 		if (!this.options.emitters) return
 		this.listeners = new Collection<string, CascadeListener>()
-		this.client?.logHandler.verbose("[Cascade] Loading listener files")
+		this.client.logHandler.verbose("[Cascade] Loading listener files")
+		try {
+			const file = await Deno.stat(this.options.listenerDir)
+		} catch (e) {
+			if (e instanceof Deno.errors.NotFound) {
+				throw new InvalidDirectoryError("listener")
+			}
+			throw new Error(`Unexpected error while stating listener dir: ${e}`)
+		}
 		const files = (await recursiveReaddir(this.options.listenerDir)).map(f => join('.', f)).filter(
 			(file: string) => [".js", ".ts"].includes(extname(file))
 		)
-		this.client?.logHandler.verbose("[Cascade] Loaded listener files")
+		this.client.logHandler.verbose("[Cascade] Loaded listener files")
 		for await (const listenerFile of files) {
 			const listenerPath = resolve(listenerFile)
 			const listener: CascadeListener = new (await import("file://" + listenerPath)).default()
@@ -67,7 +75,7 @@ export class CascadeListenerHandler extends EventEmitter {
 			})
 			this.listeners.set(`${listener.options.emitter}-${listener.options.event}`, listener)
 		}
-		this.client?.logHandler.verbose("[Cascade] Loaded listeners")
+		this.client.logHandler.verbose("[Cascade] Loaded listeners")
 		this.emit("loaded")
 	}
 
@@ -77,7 +85,6 @@ export class CascadeListenerHandler extends EventEmitter {
 	 */
 	public async setEmitters(emitters: Record<string, EventEmitter>) {
 		this.options.emitters = emitters
-		this.init()
 	}
 
 	/**

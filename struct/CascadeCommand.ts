@@ -1,5 +1,5 @@
 import { Permission } from "../deps.ts";
-import { ArgumentParse, CascadeCommandArguments } from "./CascadeCommandHandler.ts";
+import { ArgumentParse, CascadeCommandArguments } from "../handlers/CascadeCommandHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
 
 /**

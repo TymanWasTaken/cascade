@@ -1,12 +1,11 @@
-import { botID, getUser, startBot, Intents } from "../deps.ts";
-import { CascadeCommandHandler } from "./CascadeCommandHandler.ts";
-import { CascadeInhibitorHandler } from "./CascadeInhibitorHandler.ts";
-import { CascadeListenerHandler } from "./CascadeListenerHandler.ts";
-import { CascadeLogHandler } from "./CascadeLogHandler.ts";
+import { getUser, startBot, Intents, UserPayload } from "../deps.ts";
+import { CascadeCommandHandler, CascadeCommandHandlerOptions } from "../handlers/CascadeCommandHandler.ts";
+import { CascadeInhibitorHandler, CascadeInhibitorHandlerOptions } from "../handlers/CascadeInhibitorHandler.ts";
+import { CascadeListenerHandler, CascadeListenerHandlerOptions } from "../handlers/CascadeListenerHandler.ts";
+import { CascadeLogHandler } from "../handlers/CascadeLogHandler.ts";
 import { CascadeMessage } from "./CascadeMessage.ts";
 import { EventEmitter } from "./EventEmitter.ts";
 import { IntentUtil } from "./IntentUtil.ts";
-import { TermColors } from "./CascadeLogHandler.ts";
 
 /**
  * The options for this bot
@@ -23,15 +22,15 @@ export interface CascadeClientOptions {
 	/**
 	 * The command handler to use
 	 */
-	commandHandler: CascadeCommandHandler,
+	commandHandlerOptions: CascadeCommandHandlerOptions,
 	/**
 	 * The listener handler to use
 	 */
-	listenerHandler: CascadeListenerHandler,
+	listenerHandlerOptions: CascadeListenerHandlerOptions,
 	/**
 	 * The inhibitor handler to use
 	 */
-	inhibitorHandler: CascadeInhibitorHandler,
+	inhibitorHandlerOptions: CascadeInhibitorHandlerOptions,
 	/**
 	 * The owner(s) of this bot
 	 */
@@ -84,6 +83,11 @@ export class CascadeClient extends EventEmitter {
 	public ready: boolean = false
 
 	/**
+	 * The user object of this bot. This will be `undefined` before calling CascadeClient#login.
+	 */
+	public user?: UserPayload
+
+	/**
 	 * Creats the client
 	 * @param options The options to use for this bot
 	 */
@@ -92,24 +96,29 @@ export class CascadeClient extends EventEmitter {
 		this.token = options.token
 		this.intents = options.intents || IntentUtil.DEFAULT
 		this.verbose = options.verbose || false
-		options.commandHandler.init()
-		options.listenerHandler.init()
-		options.inhibitorHandler.init()
-		this.commandHandler = options.commandHandler
-		this.listenerHandler = options.listenerHandler
-		this.inhibitorHandler = options.inhibitorHandler
-		this.commandHandler.client = this
-		this.listenerHandler.client = this
-		this.inhibitorHandler.client = this
+		this.commandHandler = new CascadeCommandHandler(this, options.commandHandlerOptions)
+		this.listenerHandler = new CascadeListenerHandler(this, options.listenerHandlerOptions)
+		this.inhibitorHandler = new CascadeInhibitorHandler(this, options.inhibitorHandlerOptions)
 		this.logHandler = new CascadeLogHandler(this, {
 			time: true,
 			colors: true
 		})
 		this.owners = options.owners
+		this.listenerHandler.setEmitters({
+			client: this,
+			commandHandler: this.commandHandler,
+			listenerHandler: this.listenerHandler,
+			inhibitorHandler: this.inhibitorHandler
+		})
 	}
 
-	public user() {
-		return getUser(botID)
+	/**
+	 * Initializes everything in this handler
+	 */
+	public async init() {
+		await this.listenerHandler.init()
+		await this.commandHandler.init()
+		await this.inhibitorHandler.init()
 	}
 
 	/**
@@ -118,7 +127,7 @@ export class CascadeClient extends EventEmitter {
 	public async login() {
 		const thisClient = this
 		this.logHandler.verbose("[Cascade] Logging in")
-		startBot({
+		await startBot({
 			token: this.token,
 			intents: this.intents,
 			eventHandlers: {
@@ -257,5 +266,19 @@ export class CascadeClient extends EventEmitter {
 			}
 		});
 		this.logHandler.verbose("[Cascade] Logged in")
+		const botid = (
+			await (
+				await fetch("https://discord.com/api/v8/oauth2/applications/@me", {
+					headers: {
+						"Authorization": `Bot ${this.token}`
+					}
+				})
+			).json()
+		).id as string
+		try {
+			this.user = await getUser(botid)
+		} catch {
+			this.user = undefined
+		}
 	}
 }

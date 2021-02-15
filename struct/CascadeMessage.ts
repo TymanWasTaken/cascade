@@ -1,6 +1,6 @@
 import { Message } from "../deps.ts"
 import { CascadeClient } from "./CascadeClient.ts"
-import { CascadeCommandParse } from "./CascadeCommandHandler.ts"
+import { CascadeCommandParse } from "../handlers/CascadeParseHandler.ts"
 
 export const convertMessage = (message: Message, client: CascadeClient, parse: CascadeCommandParse | null) => {
 	const newMessage = message as CascadeMessage

@@ -1,4 +1,4 @@
-import { CascadeClient } from "./CascadeClient.ts"
+import { CascadeClient } from "../struct/CascadeClient.ts"
 
 interface CascadeLogHandlerOptions {
 	colors: boolean,
@@ -52,6 +52,6 @@ export class CascadeLogHandler {
 	 * Log a message only if in verbose mode
 	 */
 	public verbose(message: string) {
-		if (this.client?.verbose) console.log(message)
+		if (this.client.verbose) console.log(message)
 	}
 }
