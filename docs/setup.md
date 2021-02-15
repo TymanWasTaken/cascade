@@ -1,18 +1,18 @@
 # Setting up
 
-Make sure you have all the pre-requisites listed here:
-- [Deno](https://deno.land/)
-- [An application with a bot user](https://discord.com/developers/applications/)
+Make sure you have all the prerequisites listed here:
+- [Deno](https://deno.land/) - Needed to run the bot
+- [An application with a bot user](https://discord.com/developers/applications/) - Needed for obivious reasons. If you have not created one yet, make one now and add it to a test server.
 
 Then make a new folder where your code will be.
 
-In this new folder, make a new file. This will be the main file of your bot.
+In this folder, create a file. This will be the main file of your bot.
 Import the `CascadeClient` like this:
 ```ts
 import { CascadeClient } from "https://deno.land/x/cascade@1.0.3/mod.ts";
 ```
 
-You then need to create the client and handlers, do that like this
+You then need to create the client and handlers, as demonstrated below.
 ```ts
 import { 
 	CascadeClient,
@@ -33,15 +33,15 @@ const inhibitorHandler = new CascadeInhibitorHandler({
 });
 
 const client = new CascadeClient({
-	token: 'token here', // the token for your bot user
+	token: 'token here', // Your bot's token.
 	commandHandler,
 	listenerHandler,
 	inhibitorHandler,
-	owners: ["put your discord id here"], // this is an array of ids for who is an "owner" of the bot
+	owners: ["put your discord id here"], // This is an array of IDs containing the "owners" of the bot. Be careful about who you put in here.
 	verbose: true // Only put this if you want cascade to log a lot of things.
 });
 
-client.listenerHandler.setEmitters({ // This sets all the emitters that you can use in your listeners, you can add whatever you want, this is just a recommended default.
+client.listenerHandler.setEmitters({ // This sets all the emitters that you can use in your listeners. You may add whatever you want here, these are just the recommended defaults.
   commandHandler,
   listenerHandler,
   inhibitorHandler,
@@ -49,10 +49,10 @@ client.listenerHandler.setEmitters({ // This sets all the emitters that you can 
 });
 ```
 
-This sets up the base for your bot and where it all starts. If you run it now, it will error because it can't find the listeners, commands, and inhibitors directories. To fix this, create all of those. Then the bot should then run.
+This sets up the base for your bot, and is where it all starts. If you run it now, it will throw errors because it can't find the listeners, commands, and inhibitors directories. To fix this, create all of those. Then the bot should then run.
 
 ## Next steps
 
 - [Commands](commands.md)
-- [Listeners](listeners.md)
-- [Inhibitors](inhibitors.md)
+- [Listeners (WIP)](listeners.md)
+- [Inhibitors (WIP)](inhibitors.md)
