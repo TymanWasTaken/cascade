@@ -2,7 +2,7 @@
  * A utility class inspired by discord.js's Collection, to help with maps.
  */
 export class Collection<K, V> extends Map {
-	public forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void {
+	public forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: unknown): void {
 		super.forEach(callbackfn, thisArg)
 	}
 	public get(key: K): V | undefined {

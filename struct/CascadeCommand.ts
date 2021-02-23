@@ -87,7 +87,7 @@ export class CascadeCommand {
 	 * Ran on command sent by user
 	 * @param message The message sent
 	 */
-	public async exec(message: CascadeMessage, args?: ArgumentParse): Promise<any> {
+	public async exec(message: CascadeMessage, args?: ArgumentParse): Promise<void> {
 		// pass
 	}
 }

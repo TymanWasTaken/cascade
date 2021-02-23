@@ -1,9 +1,9 @@
-import { extname, join, resolve, recursiveReaddir } from "../deps.ts";
+import { extname, join, resolve, recursiveReaddir, Message } from "../deps.ts";
 import { Collection } from '../struct/Collection.ts'
 import { CascadeListener } from '../struct/CascadeListener.ts'
 import { CascadeClient } from "../struct/CascadeClient.ts";
 import { EventEmitter } from "../struct/EventEmitter.ts";
-import { convertMessage } from "../struct/CascadeMessage.ts";
+import { convertMessage, isMessage } from "../struct/CascadeMessage.ts";
 import { InvalidDirectoryError } from "../errors/InvalidDirectory.ts";
 
 /**
@@ -49,7 +49,7 @@ export class CascadeListenerHandler extends EventEmitter {
 	/**
 	 * Initializes the listeners in this handler
 	 */
-	public async init(silent: boolean = false) {
+	public async init(silent = false) {
 		this.listeners.clear()
 		if (!this.options.emitters) return
 		this.listeners = new Collection<string, CascadeListener>()
@@ -70,7 +70,7 @@ export class CascadeListenerHandler extends EventEmitter {
 			const listenerPath = resolve(listenerFile)
 			const listener: CascadeListener = new (await import("file://" + listenerPath)).default()
 			if (!this.options.emitters[listener.options.emitter]) throw new Error(`${listener.options.emitter} was not a set emitter!`)
-			this.options.emitters[listener.options.emitter].on(listener.options.event, (...args: any[]) => {
+			this.options.emitters[listener.options.emitter].on(listener.options.event, (...args: unknown[]) => {
 				this.onEvent(listener.options.emitter, listener.options.event, args)
 			})
 			this.listeners.set(`${listener.options.emitter}-${listener.options.event}`, listener)
@@ -83,7 +83,7 @@ export class CascadeListenerHandler extends EventEmitter {
 	 * Sets the emitters used by this handler
 	 * @param emitters The emitters to use for this listener handler
 	 */
-	public async setEmitters(emitters: Record<string, EventEmitter>) {
+	public setEmitters(emitters: Record<string, EventEmitter>) {
 		this.options.emitters = emitters
 	}
 
@@ -93,16 +93,13 @@ export class CascadeListenerHandler extends EventEmitter {
 	 * @param event The event emitted
 	 * @param params The parameters for this event
 	 */
-	public async onEvent(emitter: string, event: string, params?: any[]) {
+	public onEvent(emitter: string, event: string, params?: unknown[]) {
 		const handler = this.listeners.get(`${emitter}-${event}`)
 		if (handler) {
 			// Convert messages to cascade message
-			params = params?.map(v => {
-				try {
-					return ('tts' in v) ? convertMessage(v, this.client as CascadeClient, null) : v
-				} catch {
-					return v
-				}
+			params = params?.map((v) => {
+				if (isMessage(v)) return convertMessage(v, this.client, null)
+				else return v
 			})
 			if (params) handler.exec(...params)
 			else handler.exec()

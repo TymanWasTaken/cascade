@@ -3,7 +3,7 @@ import { Collection } from "./Collection.ts";
 /**
  * Type for a function which is ran on events
  */
-type EventHandler = (...args: any[]) => void
+type EventHandler = (...args: unknown[]) => void
 
 /**
  * A very small port of nodejs's EventEmitters
@@ -34,7 +34,7 @@ export class EventEmitter {
 	 * @param event The event to emit
 	 * @param args The arguments to pass to listeners
 	 */
-	public emit(event: string, args?: any[]) {
+	public emit(event: string, args?: unknown[]) {
 		if (this.registeredEvents.has("once-" + event)) {
 			const handler = this.registeredEvents.get("once-" + event)
 			if (args) {

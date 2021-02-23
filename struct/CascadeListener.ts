@@ -37,7 +37,7 @@ export class CascadeListener {
 	 * Ran on the event specified in the options
 	 * @param params The parameters the event was sent with
 	 */
-	public async exec(...params: any[]): Promise<any> {
+	public async exec(...params: unknown[]): Promise<void> {
 		// pass
 	}
 }

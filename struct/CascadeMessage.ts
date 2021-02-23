@@ -26,3 +26,7 @@ export interface CascadeMessage extends Message {
 	 */
 	globalFlags?: Record<string, boolean | string>
 }
+
+export const isMessage = (msg: unknown): msg is Message => {
+	return !!msg && !!(msg as Message).tts
+}

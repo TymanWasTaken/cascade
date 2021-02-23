@@ -40,6 +40,7 @@ export class CascadeInhibitor {
 	 * @param command The command to be run
 	 * @returns True or false based on if the command should run or not
 	 */
+	// deno-lint-ignore require-await
 	public async exec(message: CascadeMessage, command: CascadeCommand): Promise<boolean> {
 		return true
 	}
