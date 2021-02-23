@@ -3,7 +3,12 @@ import { Message, parser } from "../deps.ts"
 import { CascadeClient } from "../struct/CascadeClient.ts"
 import { CascadeCommand } from "../struct/CascadeCommand.ts"
 import { CascadeMessage } from "../struct/CascadeMessage.ts"
-import { CascadeCommandHandler } from "./CascadeCommandHandler.ts"
+import { 
+	CascadeCommandHandler, 
+	CascadeCommandArguments, 
+	CascadeFlagArgument,
+	CascadeCommandArgument
+} from "./CascadeCommandHandler.ts"
 
 type prefixType = ((message: Message) => string | string[]) | string | string[]
 
@@ -50,11 +55,7 @@ export enum ArgFailReason {
 export interface CascadeCommandArgParse {
 	success: boolean,
 	reason?: ArgFailReason,
-	problemArg?: {
-		id: string,
-		type: string,
-		match?: 'content'
-	}
+	problemArg?: CascadeCommandArgument
 	parsed?: Record<string, unknown>,
 	globalFlags?: Record<string, boolean | string>
 }
@@ -91,7 +92,8 @@ export class CascadeParseHandler {
 		for (const p of prefixes) {
 			for (const command of this.client.commandHandler.commands.values()) {
 				for (const alias of command.options.aliases) {
-					if (!message.content.match(new RegExp(`^${escapeRegExp(p + alias)}(?: ?$|(?: ?\w)+)`))) continue
+					const cmdReg = new RegExp(`^${escapeRegExp(p + alias)}(?: ?$|(?: \\w+)(?: \\w+)*)`)
+					if (!message.content.match(cmdReg)) continue
 					if (message.content.match(new RegExp(`^${escapeRegExp(p + alias)} ?$`))) {
 						return {
 							alias,
@@ -120,32 +122,21 @@ export class CascadeParseHandler {
 		const parsedArgs: Record<string, unknown> = {}
 		const globalParsedFlags: Record<string, boolean | string> = {}
 		const parse = message.parse as CascadeCommandParse
-		const normal: {
-			id: string,
-			type: string,
-			match?: 'content'
-		}[] = [];
-		const flags: {
-			id: string,
-			type: string,
-			match?: 'content'
-		}[] = [];
-		const content: {
-			id: string,
-			type: string,
-			match?: 'content'
-		}[] = [];
-		((parse.command.options.args) as {
-			id: string,
-			type: string,
-			match?: 'content'
-		}[]).forEach(arg => {
-			if (arg.type == 'flag') return flags.push(arg)
+		const normal: CascadeCommandArguments = [];
+		const flags: CascadeCommandArguments = [];
+		const content: CascadeCommandArguments = [];
+		((parse.command.options.args) as CascadeCommandArguments).forEach(arg => {
+			if (typeof arg.type != 'string') return flags.push(arg)
 			else if (arg.match == 'content') return content.push(arg)
 			else return normal.push(arg)
 		})
 		let i = 0
-		for (const arg of normal) {
+		for (const normalArg of normal) {
+			const arg = normalArg as {
+				id: string,
+				type: string,
+				match?: 'content'
+			}
 			if (!CascadeCommandHandler.types[arg.type]) {
 				return {
 					success: false,
@@ -164,18 +155,25 @@ export class CascadeParseHandler {
 			parsedArgs[arg.id] = parsed
 			i++
 		}
-		for (const flag of flags) {
-			if (!parse.args[flag.id]) {
-				return {
-					success: false,
-					reason: ArgFailReason.MISSING,
-					problemArg: flag
-				}
+		for (const flagArg of flags) {
+			const flag = flagArg as {
+				id: string,
+				type: CascadeFlagArgument,
+				match?: 'content'
 			}
-			parsedArgs[flag.id] = parse.args[flag.id]
+			if (!parse.args[flag.id]) {
+				parsedArgs[flag.id] = flag.type.default
+			} else {
+				parsedArgs[flag.id] = parse.args[flag.id]
+			}
 		}
 		for (const contentArg of content) {
-			const parsed = await CascadeCommandHandler.types[contentArg.type](parse.content, message)
+			const arg = contentArg as {
+				type: string,
+				id: string,
+				match: 'content'
+			}
+			const parsed = await CascadeCommandHandler.types[arg.type](parse.content, message)
 			parsedArgs[contentArg.id] = parsed
 		}
 		if (this.client.commandHandler.options.globalFlags) {

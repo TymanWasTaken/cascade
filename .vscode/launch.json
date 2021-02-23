@@ -17,6 +17,7 @@
 				"--allow-all"
 			],
 			"attachSimplePort": 9229,
+			"outputCapture": "std",
 			"stopOnEntry": false
 		}
 	]

@@ -1,6 +1,5 @@
 import { join, extname, recursiveReaddir, Collection, getUser, Message, resolve, parser, memberIDHasPermission } from "../deps.ts";
 import { CascadeCommand } from '../struct/CascadeCommand.ts'
-import { Arguments } from "https://deno.land/x/yargs_parser@v20.2.4-deno/build/lib/yargs-parser-types.d.ts";
 import { CascadeClient } from "../struct/CascadeClient.ts";
 import { CascadeMessage, convertMessage } from "../struct/CascadeMessage.ts";
 import { EventEmitter } from "../struct/EventEmitter.ts";
@@ -34,13 +33,17 @@ export interface CascadeCommandHandlerOptions {
 	globalFlags?: string[]
 }
 
-export interface CascadeCommandArguments {
-	[index: number]: {
-		id: string,
-		type: string,
-		match?: 'content'
-	};
+export interface CascadeFlagArgument {
+	default?: unknown
 }
+
+export interface CascadeCommandArgument {
+	id: string,
+	type: string | CascadeFlagArgument,
+	match?: 'content'
+}
+
+export type CascadeCommandArguments = CascadeCommandArgument[]
 
 /**
  * The handler used to handle commands/command parsing
@@ -190,8 +193,10 @@ export class CascadeCommandHandler extends EventEmitter {
 			}
 			msg.globalFlags = parsedArgs.globalFlags
 			parse.command.exec(msg, parsedArgs.parsed)
+		} else {
+			this.emit("messageInvalid", [message])
 		}
-		this.emit("messageInvalid", [message])
+		
 	}
 	/**
 	 * Checks if a user is an owner
