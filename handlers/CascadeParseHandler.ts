@@ -3,9 +3,9 @@ import { Message, parser } from "../deps.ts"
 import { CascadeClient } from "../struct/CascadeClient.ts"
 import { CascadeCommand } from "../struct/CascadeCommand.ts"
 import { CascadeMessage } from "../struct/CascadeMessage.ts"
-import { 
-	CascadeCommandHandler, 
-	CascadeCommandArguments, 
+import {
+	CascadeCommandHandler,
+	CascadeCommandArguments,
 	CascadeFlagArgument,
 	CascadeCommandArgument
 } from "./CascadeCommandHandler.ts"
