@@ -80,7 +80,7 @@ export class CascadeClient extends EventEmitter {
 	/**
 	 * If this client is ready or not
 	 */
-	public ready: boolean = false
+	public ready = false
 
 	/**
 	 * The user object of this bot. This will be `undefined` before calling CascadeClient#login.
@@ -125,143 +125,142 @@ export class CascadeClient extends EventEmitter {
 	 * Logs into discord with this client
 	 */
 	public async login() {
-		const thisClient = this
 		this.logHandler.verbose("[Cascade] Logging in")
 		await startBot({
 			token: this.token,
 			intents: this.intents,
 			eventHandlers: {
-				applicationCommandCreate(...args: any[]) {
-					thisClient.emit("applicationCommandCreate", args)
+				applicationCommandCreate: (...args: unknown[]) => {
+					this.emit("applicationCommandCreate", args)
 				},
-				botUpdate(...args: any[]) {
-					thisClient.emit("botUpdate", args)
+				botUpdate: (...args: unknown[]) => {
+					this.emit("botUpdate", args)
 				},
-				channelCreate(...args: any[]) {
-					thisClient.emit("channelCreate", args)
+				channelCreate: (...args: unknown[]) => {
+					this.emit("channelCreate", args)
 				},
-				channelUpdate(...args: any[]) {
-					thisClient.emit("channelUpdate", args)
+				channelUpdate: (...args: unknown[]) => {
+					this.emit("channelUpdate", args)
 				},
-				channelDelete(...args: any[]) {
-					thisClient.emit("channelDelete", args)
+				channelDelete: (...args: unknown[]) => {
+					this.emit("channelDelete", args)
 				},
-				debug(...args: any[]) {
-					thisClient.emit("debug", args)
+				debug: (...args: unknown[]) => {
+					this.emit("debug", args)
 				},
-				dispatchRequirements(...args: any[]) {
-					thisClient.emit("dispatchRequirements", args)
+				dispatchRequirements: (...args: unknown[]) => {
+					this.emit("dispatchRequirements", args)
 				},
-				guildBanAdd(...args: any[]) {
-					thisClient.emit("guildBanAdd", args)
+				guildBanAdd: (...args: unknown[]) => {
+					this.emit("guildBanAdd", args)
 				},
-				guildBanRemove(...args: any[]) {
-					thisClient.emit("guildBanRemove", args)
+				guildBanRemove: (...args: unknown[]) => {
+					this.emit("guildBanRemove", args)
 				},
-				guildCreate(...args: any[]) {
-					thisClient.emit("guildCreate", args)
+				guildCreate: (...args: unknown[]) => {
+					this.emit("guildCreate", args)
 				},
-				guildLoaded(...args: any[]) {
-					thisClient.emit("guildLoaded", args)
+				guildLoaded: (...args: unknown[]) => {
+					this.emit("guildLoaded", args)
 				},
-				guildUpdate(...args: any[]) {
-					thisClient.emit("guildUpdate", args)
+				guildUpdate: (...args: unknown[]) => {
+					this.emit("guildUpdate", args)
 				},
-				guildDelete(...args: any[]) {
-					thisClient.emit("guildDelete", args)
+				guildDelete: (...args: unknown[]) => {
+					this.emit("guildDelete", args)
 				},
-				guildEmojisUpdate(...args: any[]) {
-					thisClient.emit("guildEmojisUpdate", args)
+				guildEmojisUpdate: (...args: unknown[]) => {
+					this.emit("guildEmojisUpdate", args)
 				},
-				guildMemberAdd(...args: any[]) {
-					thisClient.emit("guildMemberAdd", args)
+				guildMemberAdd: (...args: unknown[]) => {
+					this.emit("guildMemberAdd", args)
 				},
-				guildMemberRemove(...args: any[]) {
-					thisClient.emit("guildMemberRemove", args)
+				guildMemberRemove: (...args: unknown[]) => {
+					this.emit("guildMemberRemove", args)
 				},
-				guildMemberUpdate(...args: any[]) {
-					thisClient.emit("guildMemberUpdate", args)
+				guildMemberUpdate: (...args: unknown[]) => {
+					this.emit("guildMemberUpdate", args)
 				},
-				heartbeat(...args: any[]) {
-					thisClient.emit("heartbeat", args)
+				heartbeat: (...args: unknown[]) => {
+					this.emit("heartbeat", args)
 				},
-				interactionCreate(...args: any[]) {
-					thisClient.emit("interactionCreate", args)
+				interactionCreate: (...args: unknown[]) => {
+					this.emit("interactionCreate", args)
 				},
-				messageCreate(...args: any[]) {
-					thisClient.emit("messageCreate", args)
-					thisClient.commandHandler.onMessage(args[0] as CascadeMessage)
+				messageCreate: (...args: unknown[]) => {
+					this.emit("messageCreate", args)
+					this.commandHandler.onMessage(args[0] as CascadeMessage)
 				},
-				messageDelete(...args: any[]) {
-					thisClient.emit("messageDelete", args)
+				messageDelete: (...args: unknown[]) => {
+					this.emit("messageDelete", args)
 				},
-				messageUpdate(...args: any[]) {
-					thisClient.emit("messageUpdate", args)
+				messageUpdate: (...args: unknown[]) => {
+					this.emit("messageUpdate", args)
 				},
-				nicknameUpdate(...args: any[]) {
-					thisClient.emit("nicknameUpdate", args)
+				nicknameUpdate: (...args: unknown[]) => {
+					this.emit("nicknameUpdate", args)
 				},
-				presenceUpdate(...args: any[]) {
-					thisClient.emit("presenceUpdate", args)
+				presenceUpdate: (...args: unknown[]) => {
+					this.emit("presenceUpdate", args)
 				},
-				raw(...args: any[]) {
-					thisClient.emit("raw", args)
+				raw: (...args: unknown[]) => {
+					this.emit("raw", args)
 				},
-				rawGateway(...args: any[]) {
-					thisClient.emit("rawGateway", args)
+				rawGateway: (...args: unknown[]) => {
+					this.emit("rawGateway", args)
 				},
-				ready(...args: any[]) {
-					thisClient.emit("ready", args)
-					thisClient.ready = true
-					thisClient.logHandler.verbose("[Cascade] Bot ready")
+				ready: (...args: unknown[]) => {
+					this.emit("ready", args)
+					this.ready = true
+					this.logHandler.verbose("[Cascade] Bot ready")
 				},
-				reactionAdd(...args: any[]) {
-					thisClient.emit("reactionAdd", args)
+				reactionAdd: (...args: unknown[]) => {
+					this.emit("reactionAdd", args)
 				},
-				reactionRemove(...args: any[]) {
-					thisClient.emit("reactionRemove", args)
+				reactionRemove: (...args: unknown[]) => {
+					this.emit("reactionRemove", args)
 				},
-				reactionRemoveAll(...args: any[]) {
-					thisClient.emit("reactionRemoveAll", args)
+				reactionRemoveAll: (...args: unknown[]) => {
+					this.emit("reactionRemoveAll", args)
 				},
-				reactionRemoveEmoji(...args: any[]) {
-					thisClient.emit("reactionRemoveEmoji", args)
+				reactionRemoveEmoji: (...args: unknown[]) => {
+					this.emit("reactionRemoveEmoji", args)
 				},
-				roleCreate(...args: any[]) {
-					thisClient.emit("roleCreate", args)
+				roleCreate: (...args: unknown[]) => {
+					this.emit("roleCreate", args)
 				},
-				roleDelete(...args: any[]) {
-					thisClient.emit("roleDelete", args)
+				roleDelete: (...args: unknown[]) => {
+					this.emit("roleDelete", args)
 				},
-				roleUpdate(...args: any[]) {
-					thisClient.emit("roleUpdate", args)
+				roleUpdate: (...args: unknown[]) => {
+					this.emit("roleUpdate", args)
 				},
-				roleGained(...args: any[]) {
-					thisClient.emit("roleGained", args)
+				roleGained: (...args: unknown[]) => {
+					this.emit("roleGained", args)
 				},
-				roleLost(...args: any[]) {
-					thisClient.emit("roleLost", args)
+				roleLost: (...args: unknown[]) => {
+					this.emit("roleLost", args)
 				},
-				shardReady(...args: any[]) {
-					thisClient.emit("shardReady", args)
+				shardReady: (...args: unknown[]) => {
+					this.emit("shardReady", args)
 				},
-				typingStart(...args: any[]) {
-					thisClient.emit("typingStart", args)
+				typingStart: (...args: unknown[]) => {
+					this.emit("typingStart", args)
 				},
-				voiceChannelJoin(...args: any[]) {
-					thisClient.emit("voiceChannelJoin", args)
+				voiceChannelJoin: (...args: unknown[]) => {
+					this.emit("voiceChannelJoin", args)
 				},
-				voiceChannelLeave(...args: any[]) {
-					thisClient.emit("voiceChannelLeave", args)
+				voiceChannelLeave: (...args: unknown[]) => {
+					this.emit("voiceChannelLeave", args)
 				},
-				voiceChannelSwitch(...args: any[]) {
-					thisClient.emit("voiceChannelSwitch", args)
+				voiceChannelSwitch: (...args: unknown[]) => {
+					this.emit("voiceChannelSwitch", args)
 				},
-				voiceStateUpdate(...args: any[]) {
-					thisClient.emit("voiceStateUpdate", args)
+				voiceStateUpdate: (...args: unknown[]) => {
+					this.emit("voiceStateUpdate", args)
 				},
-				webhooksUpdate(...args: any[]) {
-					thisClient.emit("webhooksUpdate", args)
+				webhooksUpdate: (...args: unknown[]) => {
+					this.emit("webhooksUpdate", args)
 				}
 			}
 		});
