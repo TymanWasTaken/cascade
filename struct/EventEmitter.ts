@@ -35,7 +35,6 @@ export class EventEmitter {
 	 * @param args The arguments to pass to listeners
 	 */
 	public emit(event: string, args?: any[]) {
-		console.log(`[Debug] Event ${event} emitted`)
 		if (this.registeredEvents.has("once-" + event)) {
 			const handler = this.registeredEvents.get("once-" + event)
 			if (args) {
