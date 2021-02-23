@@ -1,7 +1,7 @@
 <h1 align = "center">
 	<img src="https://cdn.discordapp.com/attachments/807406629070700584/807601297590059038/imageedit_1_3499097741.png">
 	<br>
-	Cascade: Library for Discordeno
+	Cascade: Framework for Discordeno
 </h1>
 
 <div align="center">
@@ -13,9 +13,9 @@
 [![made with typescript](https://img.shields.io/badge/Made%20With-Typescript-orange?style=for-the-badge)](https://www.typescriptlang.org/)
 </div>
 
-The cascade project is a library for the [discordeno](https://github.com/discordeno/discordeno) library that allows dynamic and easy command handling with many features, such as easily creatable bots that allow lots of customization
+The cascade project is a bot framework for the [discordeno](https://github.com/discordeno/discordeno) library that allows dynamic and easy command handling with many features, such as easily creatable bots that allow lots of customization.
 
-# WARNING: THIS IS A WORK IN PROGRESS AND ANYTHING HERE CURRENTLY WILL LIKELY BE CHANGED LATER.
+# WARNING: THIS IS A WORK IN PROGRESS AND ANYTHING HERE CURRENTLY CAN AND LIKELY WILL BE CHANGED LATER.
 
 **Website/Docs**: https://cascade.tyman.tech (WIP)
 
