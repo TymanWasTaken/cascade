@@ -1,3 +1,5 @@
+# This is archived and I will most likely not be updating it any further. If anyone wants to pick it up go ahead but I likely won't.
+
 <h1 align = "center">
 	<img src="https://cdn.discordapp.com/attachments/807406629070700584/807601297590059038/imageedit_1_3499097741.png">
 	<br>
